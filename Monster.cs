@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -13,17 +14,17 @@ namespace Team_B_11_RPG
         small = 1,
         boss = 2
     }
-    internal class Monster
+    internal class RandomMonster
     {
-        public static List<Monster> monsters = new List<Monster>();
+        public static List<RandomMonster> randmonsters = new List<RandomMonster>();
         public string Name { get; }
         public int Level { get; }
         public int Atk { get; }
         public int Def { get; }
-        public int Hp { get; }
-        public bool IsAlive {  get; }
+        public int Hp { get; set; }
+        public bool IsAlive { get; set; }
         public MonsterType Type { get; }
-        public Monster(string name, int level, int atk, int def, int hp, MonsterType type)
+        public RandomMonster(string name, int level, int atk, int def, int hp, MonsterType type, bool IsAlive)
         {
             Name = name;
             Level = level;
@@ -31,16 +32,43 @@ namespace Team_B_11_RPG
             Def = def;
             Hp = hp;
             Type = type;
+            this.IsAlive = true;
+        }
+        public void MonsterBattle(bool withNumber = false, int idx = 0)
+        {
+            if (withNumber)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.Write("{0} ", idx);
+                Console.ResetColor();
+            }
+        }
+    }
+    internal class Monster
+    {
+        public static List<Monster> monsters = new List<Monster>(); 
+        public string Name { get; }
+        public int Level { get; }
+        public int Atk { get; }
+        public int Def { get; }
+        public int Hp { get; }
+        public bool IsAlive {  get; }
+        public MonsterType Type { get; }
+        public Monster(string name, int level, int atk, int def, int hp, MonsterType type, bool IsAlive)
+        {
+            Name = name;
+            Level = level;
+            Atk = atk;
+            Def = def;
+            Hp = hp;
+            Type = type;
+            this.IsAlive = true;
         }
         public static void MakeMonster()
         {
-            monsters.Add(new Monster("미니언", 2, 5, 0, 15, MonsterType.small));
-            monsters.Add(new Monster("공허충", 3, 9, 0, 10, MonsterType.small));
-            monsters.Add(new Monster("대포미니언", 5, 8, 0, 25, MonsterType.small));
-
-        }
-        public void MonsterBattle()
-        {
+            monsters.Add(new Monster("미니언", 2, 5, 0, 15, MonsterType.small,true));
+            monsters.Add(new Monster("공허충", 3, 9, 0, 0, MonsterType.small, true));
+            monsters.Add(new Monster("대포미니언", 5, 8, 0, 25, MonsterType.small, true)); 
 
         }
     }
