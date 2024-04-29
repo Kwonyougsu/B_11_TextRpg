@@ -30,6 +30,33 @@ namespace Team_B_11_RPG
         {
             Console.Clear();
             ConsoleUtility.PrintGameHeader();
+            CreateMenu();
+        }
+
+        private void CreateMenu()
+        {
+            Console.Clear();
+
+
+            Console.Write("원하시는 이름을 설정해주세요. : "); //이름 설정
+            player.Name = Console.ReadLine();
+
+            Console.WriteLine("직업을 선택해주세요.");  // 직업 설정 직업은 일단 2가지로 탱커와 딜러로 나눔
+            Console.WriteLine("1.탱커 : 높은 체력, 낮은 공격력");
+            Console.WriteLine("2.딜러 : 낮은 체력, 높은 공격력");
+            Console.WriteLine("");
+
+
+            int choice = ConsoleUtility.PromptMenuChoice(1, 2);
+            switch (choice)
+            {
+                case 1:
+                    player = new Player(player.Name, "탱커", 1, 10, 10, 150, 15000);
+                    break;
+                case 2:
+                    player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000);
+                    break;
+            }
             MainMenu();
         }
 
