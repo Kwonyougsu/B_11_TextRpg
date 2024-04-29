@@ -39,9 +39,28 @@ namespace Team_B_11_RPG
             if (withNumber)
             {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                Console.Write("{0} ", idx);
+                Console.Write("{0} .", idx);
                 Console.ResetColor();
             }
+            if (!IsAlive)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Lv.{Level} {Name} Dead");
+                Console.ResetColor();
+            }
+            if (IsAlive)
+            {
+                Console.Write($"Lv. {(Atk >= 0 ? "" : "")}{Level} ");
+                Console.Write($"{Name}  ");
+                Console.Write($"방어력 {(Def >= 0 ? "" : "")}{Def} ");
+                Console.Write($"HP {(Hp >= 0 ? "" : "")}{Hp}");
+            }
+
+            Console.WriteLine("");
+        }
+        internal void IsAliveToggle()
+        {
+            IsAlive = !IsAlive;
         }
     }
     internal class Monster
@@ -64,11 +83,11 @@ namespace Team_B_11_RPG
             Type = type;
             this.IsAlive = true;
         }
-        public static void MakeMonster()
+        public static void MakeMonster(bool withNumber = false, int idx = 0)
         {
             monsters.Add(new Monster("미니언", 2, 5, 0, 15, MonsterType.small,true));
-            monsters.Add(new Monster("공허충", 3, 9, 0, 0, MonsterType.small, true));
-            monsters.Add(new Monster("대포미니언", 5, 8, 0, 25, MonsterType.small, true)); 
+            monsters.Add(new Monster("공허충", 3, 9, 0, 10, MonsterType.small, true));
+            monsters.Add(new Monster("대포미니언", 5, 8, 0, 25, MonsterType.small, true));
 
         }
     }

@@ -357,8 +357,6 @@ namespace Team_B_11_RPG
             for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
                 RandomMonster.randmonsters[i].MonsterBattle(true, i + 1);
-                Console.WriteLine($"Lv.{RandomMonster.randmonsters[i].Level} {RandomMonster.randmonsters[i].Name} HP {RandomMonster.randmonsters[i].Hp} " +
-               $" || 공격력 : {RandomMonster.randmonsters[i].Hp} 방어력 : {RandomMonster.randmonsters[i].Def}");
             }
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
@@ -367,9 +365,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("0. 취소");
             Console.WriteLine("");
-            Console.WriteLine("대상을 선택해주세요.");
-
-           int Choice = int.Parse(Console.ReadLine());
+            int Choice = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count);
             //랜덤 공격력
             Random randatk = new Random();
             double attackPower = player.Atk * (1 - 0.1 * randatk.NextDouble());
@@ -381,70 +377,72 @@ namespace Team_B_11_RPG
                     Battle();
                     break;
                 default:
-                    if (RandomMonster.randmonsters[Choice - 1].IsAlive)
+                    if (RandomMonster.randmonsters[Choice - 1].Hp >= 0 && RandomMonster.randmonsters[Choice - 1].IsAlive)
                     {
-                        if (RandomMonster.randmonsters[Choice - 1].Hp > 0)
-                        {
-                            Console.Clear();
-                            ConsoleUtility.ShowTitle("Battle!!");
-                            Console.WriteLine("");
-                            Console.WriteLine($"{player.Name}의 공격!");
-                            Console.WriteLine($"{RandomMonster.randmonsters[Choice - 1].Name}을(를) 맞췄습니다. [데미지] : {player.Atk}");
-                            Console.WriteLine("");
+                        Console.Clear();
+                        ConsoleUtility.ShowTitle("Battle!!");
+                        Console.WriteLine("");
+                        Console.WriteLine($"{player.Name}의 공격!");
+                        Console.WriteLine($"{RandomMonster.randmonsters[Choice - 1].Name}을(를) 공격했습니다. [데미지] : {player.Atk}");
+                        Console.WriteLine("");
 
-                            RandomMonster selectedMonster = RandomMonster.randmonsters[Choice - 1];
-   
-                            int monsterhp = selectedMonster.Hp - (int)attackPower;
-                            if(monsterhp <= 0)
+                        RandomMonster selectedMonster = RandomMonster.randmonsters[Choice - 1];
+
+                        int monsterhp = selectedMonster.Hp - (int)attackPower;
+                        if (monsterhp <= 0)
+                        {
+                            Console.WriteLine($"{RandomMonster.randmonsters[Choice - 1].Name}");
+                            Console.WriteLine($"Hp : {RandomMonster.randmonsters[Choice - 1].Hp} -> Dead");
+                            selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
+                            Console.WriteLine("");
+                            Console.WriteLine("0. 다음");
+                            Console.WriteLine("");
+                            selectedMonster.IsAliveToggle();
+                            int choice = int.Parse(Console.ReadLine());
+                            switch (choice)
                             {
-                                Console.WriteLine($"{RandomMonster.randmonsters[Choice - 1].Name}");
-                                Console.WriteLine($"Hp : {RandomMonster.randmonsters[Choice - 1].Hp} -> Dead");
-                                Console.WriteLine("");
-                                Console.WriteLine("0. 다음");
-                                Console.WriteLine("");
-                                int choice = int.Parse(Console.ReadLine());
-                                switch (choice)
-                                {
-                                    case 0:
-                                        BattleAttack();
-                                        break;
-                                    default:
-                                        Console.WriteLine("다시 입력해주세요");
-                                        BattleAttack();
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{RandomMonster.randmonsters[Choice - 1].Name}");
-                                Console.WriteLine($"Hp : {RandomMonster.randmonsters[Choice - 1].Hp} -> Hp : {monsterhp}");
-                                Console.WriteLine("");
-                                Console.WriteLine("0. 다음");
-                                Console.WriteLine("");
-                                int choice = int.Parse(Console.ReadLine());
-                                switch (choice)
-                                {
-                                    case 0:
-                                        EnemyPhase();
-                                        break;
-                                    default:
-                                        Console.WriteLine("다시 입력해주세요");
-                                        BattleAttack();
-                                        break;
-                                }
+                                case 0:
+                                    BattleAttack();
+                                    break;
+                                default:
+                                    Console.WriteLine("다시 입력해주세요");
+                                    BattleAttack();
+                                    break;
                             }
                         }
                         else
                         {
-                        RandomMonster.randmonsters[Choice - 1].IsAlive = false;
+                            Console.WriteLine($"{RandomMonster.randmonsters[Choice - 1].Name}");
+                            Console.WriteLine($"Hp : {RandomMonster.randmonsters[Choice - 1].Hp} -> Hp : {monsterhp}");
+                            selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
+                            Console.WriteLine("");
+                            Console.WriteLine("0. 다음");
+                            int choice = int.Parse(Console.ReadLine());
+                            switch (choice)
+                            {
+                                case 0:
+                                    BattleAttack();
+                                    break;
+                                default:
+                                    Console.WriteLine("다시 입력해주세요");
+                                    BattleAttack();
+                                    break;
+                            }
                         }
                     }
                     else
                     {
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"Lv.{RandomMonster.randmonsters[Choice - 1].Level} {RandomMonster.randmonsters[Choice - 1].Name} Dead");
-                    Console.ResetColor();
+                        RandomMonster.randmonsters[Choice - 1].IsAliveToggle();
+                        BattleAttack();
                     }
+                    //if (RandomMonster.randmonsters[Choice - 1].IsAlive)
+                    //{
+                    //    Console.ForegroundColor = ConsoleColor.Gray;
+                    //    Console.WriteLine($"Lv.{RandomMonster.randmonsters[Choice - 1].Level} {RandomMonster.randmonsters[Choice - 1].Name} Dead");
+                    //    Console.ResetColor();
+                    //    BattleAttack();
+                    //}
+                    BattleAttack();
                     break;
             }
         }
