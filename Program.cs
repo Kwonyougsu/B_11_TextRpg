@@ -17,7 +17,7 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player("Jiwon", "Programmer", 1, 10, 5, 100, 15000);
+            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000);
 
             inventory = new List<Item>();
             storeInventory = new List<Item>();
@@ -277,14 +277,17 @@ namespace Team_B_11_RPG
                 Console.WriteLine($"Lv.{Monster.monsters[i].Level} {Monster.monsters[i].Name} HP {Monster.monsters[i].Hp} " +
                  $" || 공격력 : {Monster.monsters[i].Hp} 방어력 : {Monster.monsters[i].Def}");
             }
-
             Console.WriteLine("");
+            Console.WriteLine("[내 정 보]");
+            Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
+            Console.WriteLine($"{player.Hp}/{player.Hp}");
+
             Console.WriteLine("");
             Console.WriteLine("1. 공격");
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("");
 
-            int choice = ConsoleUtility.PromptMenuChoice(1, 1);
+            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
