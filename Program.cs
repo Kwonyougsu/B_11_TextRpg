@@ -2,13 +2,14 @@
 
 namespace Team_B_11_RPG
 {
+
     public class GameManager
     {
         private Player player;
         private List<Item> inventory;
 
         private List<Item> storeInventory;
-
+        private List<QuestList> quests;
 
         public GameManager()
         {
@@ -21,9 +22,14 @@ namespace Team_B_11_RPG
 
             inventory = new List<Item>();
             storeInventory = new List<Item>();
+            
             storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
             storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
             storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
+
+            quests = new List<QuestList>();
+
+            quests.Add(new QuestList("아이템을 장착하자!" , "아이템을 장착해봅시다 " , RewardType.GOLD , true));
         }
 
         public void StartGame()
@@ -50,10 +56,10 @@ namespace Team_B_11_RPG
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 전투");
-            Console.WriteLine("");
+            Console.WriteLine("5. 퀘스트 받기");
 
             // 2. 선택한 결과를 검증함
-            int choice = ConsoleUtility.PromptMenuChoice(1, 4);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 5);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
@@ -69,6 +75,9 @@ namespace Team_B_11_RPG
                     break;
                 case 4:
                     Battle();
+                    break;
+                case 5:
+                    Quest();
                     break;
             }
             MainMenu();
@@ -304,13 +313,35 @@ namespace Team_B_11_RPG
         {
 
         }
-    }
-    public class Program
-    {
-        public static void Main(string[] args)
+
+        private void Quest(string? wait = null)
         {
-            GameManager gameManager = new GameManager();
-            gameManager.StartGame();
+            if (wait != null)
+            {
+                Console.Clear();
+                ConsoleUtility.ShowTitle(wait);
+                Thread.Sleep(1000);
+            }
+            Console.Clear() ;
+            Console.WriteLine("");
+            ConsoleUtility.ShowTitle("Quest!!");
+            Console.WriteLine("");
+            for(int i = 0; i<quests.Count; i++)
+            {
+                Console.WriteLine($"{i} . {quests[i].QuestName}");
+            }
+            Console.WriteLine("");
+            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
+
         }
     }
-}
+        public class Program
+        {
+            public static void Main(string[] args)
+            {
+                GameManager gameManager = new GameManager();
+                gameManager.StartGame();
+            }
+        }
+    }
+
