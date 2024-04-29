@@ -268,19 +268,20 @@ namespace Team_B_11_RPG
             Console.Clear();
             ConsoleUtility.ShowTitle("Battle ! ");
 
-            // 몬스터 생성
-            Monster.MakeMonster();
-
+            // 랜덤 몬스터 생성
+            Random randmonster = new Random();
             // 몬스터 출력
-            for (int i = 0; i < Monster.monsters.Count; i++)
+            for (int i = 0; i < randmonster.Next(1,5); i++)
             {
-                Console.WriteLine($"Lv.{Monster.monsters[i].Level} {Monster.monsters[i].Name} HP {Monster.monsters[i].Hp} " +
-                 $" || 공격력 : {Monster.monsters[i].Hp} 방어력 : {Monster.monsters[i].Def}");
+                int j = randmonster.Next(1, 5);
+                Monster.MakeMonster();
+                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
+               $" || 공격력 : {Monster.monsters[j].Hp} 방어력 : {Monster.monsters[j].Def}");
             }
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"{player.Hp}/{player.Hp}");
+            Console.WriteLine($"HP :{player.Hp}/{player.Hp}");
 
             Console.WriteLine("");
             Console.WriteLine("1. 공격");
