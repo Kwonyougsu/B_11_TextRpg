@@ -1,4 +1,6 @@
-﻿namespace Team_B_11_RPG
+﻿using System.Threading;
+
+namespace Team_B_11_RPG
 {
     public class GameManager
     {
@@ -18,7 +20,6 @@
             player = new Player("Jiwon", "Programmer", 1, 10, 5, 100, 15000);
 
             inventory = new List<Item>();
-
             storeInventory = new List<Item>();
             storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
             storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
@@ -48,10 +49,11 @@
             Console.WriteLine("1. 상태보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
+            Console.WriteLine("4. 전투");
             Console.WriteLine("");
 
             // 2. 선택한 결과를 검증함
-            int choice = ConsoleUtility.PromptMenuChoice(1, 3);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 4);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
@@ -64,6 +66,9 @@
                     break;
                 case 3:
                     StoreMenu();
+                    break;
+                case 4:
+                    Battle();
                     break;
             }
             MainMenu();
@@ -248,6 +253,53 @@
                     }
                     break;
             }
+        }
+
+        private void Battle(string? prompt = null)
+        {
+            if (prompt != null)
+            {
+                // 1초간 메시지를 띄운 다음에 다시 진행
+                Console.Clear();
+                ConsoleUtility.ShowTitle(prompt);
+                Thread.Sleep(1000);
+            }
+
+            Console.Clear();
+            ConsoleUtility.ShowTitle("Battle ! ");
+
+            // 몬스터 생성
+            Monster.MakeMonster();
+
+            // 몬스터 출력
+            for (int i = 0; i < Monster.monsters.Count; i++)
+            {
+                Console.WriteLine($"Lv.{Monster.monsters[i].Level} {Monster.monsters[i].Name} HP {Monster.monsters[i].Hp} " +
+                 $" || 공격력 : {Monster.monsters[i].Hp} 방어력 : {Monster.monsters[i].Def}");
+            }
+
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("1. 공격");
+            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine("");
+
+            int choice = ConsoleUtility.PromptMenuChoice(1, 1);
+
+            // 3. 선택한 결과에 따라 보내줌
+            switch (choice)
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    BattleAttack();
+                    break;
+            }
+        }
+        private void BattleAttack()
+        {
+
         }
     }
     public class Program
