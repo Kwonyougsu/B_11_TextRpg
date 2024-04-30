@@ -1,10 +1,7 @@
 using System;
 using System.ComponentModel.Design;
-<<<<<<< HEAD
 using System.Runtime.CompilerServices;
-=======
 using System.Dynamic;
->>>>>>> main
 using System.Threading;
 
 namespace Team_B_11_RPG
@@ -551,7 +548,11 @@ namespace Team_B_11_RPG
                   player.Attacked_Hp = player.Attacked_Hp - (int)MattackPower;
                   Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
                   Console.WriteLine("");
-                  Console.WriteLine("0. 다음");
+                    if (player.Attacked_Hp <= 0)
+                    {
+                        losePhase();
+                    }
+                    Console.WriteLine("0. 다음");
                   int choice = ConsoleUtility.PromptMenuChoice(0, 0);
                   switch (choice)
                   {
@@ -577,10 +578,56 @@ namespace Team_B_11_RPG
             }
         }
 
+        private void losePhase()
+        {
+            Console.Clear();
+            int hp = player.Attacked_Hp;
+            hp = 0;
+            ConsoleUtility.ShowTitle("Battle - Result");
+            Console.WriteLine("");
+            ConsoleUtility.ShowTitle("You Lose");
+            Console.WriteLine("");
+            Console.WriteLine("[내 정 보]");
+            Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
+            Console.WriteLine($"HP :{player.Hp} -> {hp}");
+            Console.WriteLine("");
+            Console.WriteLine("0. 메인으로");
+            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+            switch (choice)
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                default:
+                    Console.WriteLine("다시 입력해주세요");
+                    break;
+            }
+        }
+
         private void EndPhase()
         {
-            
-
+            Console.Clear();
+            ConsoleUtility.ShowTitle("Battle - Result");
+            Console.WriteLine("");
+            ConsoleUtility.ShowTitle("Victory");
+            Console.WriteLine("");
+            Console.WriteLine($"던전에서 몬스터 {RandomMonster.randmonsters.Count}마리를 잡았습니다");
+            Console.WriteLine("");
+            Console.WriteLine("[내 정 보]");
+            Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
+            Console.WriteLine($"HP :{player.Hp} -> {player.Attacked_Hp}");
+            Console.WriteLine("");
+            Console.WriteLine("0. 다음");
+            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+            switch (choice)
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                default:
+                    Console.WriteLine("다시 입력해주세요");
+                    break;
+            }
         }
     }
         public class Program
