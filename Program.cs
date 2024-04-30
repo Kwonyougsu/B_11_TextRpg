@@ -25,7 +25,7 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000);
+            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100);
 
             inventory = new List<Item>();
             storeInventory = new List<Item>();
@@ -59,10 +59,10 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(player.Name, "탱커", 1, 10, 10, 150, 15000);
+                    player = new Player(player.Name, "탱커", 1, 10, 10, 150, 15000,150);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000);
+                    player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000,100);
                     break;
             }
             MainMenu();
@@ -320,7 +320,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Hp}/{player.Hp}");
+            Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
 
             Console.WriteLine("");
             Console.WriteLine("1. 공격");
@@ -362,7 +362,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Hp}/{player.Hp}");
+            Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
             Console.WriteLine("");
             Console.WriteLine("0. 취소");
             Console.WriteLine("");
@@ -471,6 +471,11 @@ namespace Team_B_11_RPG
 
             for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
+                //랜덤 공격력
+                Random randatk = new Random();
+                double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
+                MattackPower = Math.Ceiling(MattackPower);
+
                 if (RandomMonster.randmonsters[i].IsAlive)
                 {
                     Console.Clear();
@@ -481,18 +486,35 @@ namespace Team_B_11_RPG
                     Console.WriteLine("");
                     Console.WriteLine("[내 정 보]");
                     Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-                    int attackHp = player.Hp - RandomMonster.randmonsters[i].Atk;
-                    Console.WriteLine($"HP :{attackHp}/{player.Hp}");
+                    player.Attacked_Hp = player.Attacked_Hp - (int)MattackPower;
+                    Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
                     Console.WriteLine("");
-                    //Thread.Sleep(1000);
-
+                    Console.WriteLine("0. 다음");
+                    int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                    switch (choice)
+                    {
+                        case 0:
+                            break;
+                        default:
+                            Console.WriteLine("다시 입력해주세요");
+                            break;
+                    }
                 }
                 else
                 {
-
+                 //변경점
+                    EndPhase();
                 }
             }
+            BattleAttack();
         }
+
+        private void EndPhase()
+        {
+            Console.WriteLine("Vitory");
+
+        }
+    }
         public class Program
         {
             public static void Main(string[] args)
@@ -502,4 +524,4 @@ namespace Team_B_11_RPG
             }
         }
     }
-}
+
