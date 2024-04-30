@@ -69,6 +69,7 @@ namespace Team_B_11_RPG
                     player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000);
                     break;
             }
+            
 
 
             MainMenu();
