@@ -3,6 +3,8 @@ using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using System.Dynamic;
 using System.Threading;
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Team_B_11_RPG
 {
@@ -51,8 +53,6 @@ namespace Team_B_11_RPG
         {
             Console.Clear();
 
-
-
             Console.Write("원하시는 이름을 설정해주세요. : "); //이름 설정
             player.Name = Console.ReadLine();
 
@@ -61,7 +61,6 @@ namespace Team_B_11_RPG
             Console.WriteLine("2.딜러 : 낮은 체력, 높은 공격력");
             Console.WriteLine("");
 
-
             int choice = ConsoleUtility.PromptMenuChoice(1, 2);
             switch (choice)
             {
@@ -69,7 +68,7 @@ namespace Team_B_11_RPG
                     player = new Player(player.Name, "탱커", 1, 10, 10, 150, 15000,150);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000,100);
+                    player = new Player(player.Name, "딜러", 1, 20, 5, 10, 15000,10);
                     break;
             }
             
@@ -147,14 +146,14 @@ namespace Team_B_11_RPG
                     MainMenu();
                     break;
                 case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
-                    if (player.Attacked_Hp <= (player.Hp - 31))
+                    if (player.Current_Hp <= (player.MaxHp - 31))
                     {
-                        player.Attacked_Hp += 30;
+                        player.Current_Hp += 30;
                         Rest("체력이 30 회복되었습니다.");
                     }
-                    else if (player.Attacked_Hp >= (player.Hp -30) && player.Attacked_Hp <= (player.Hp - 1))
+                    else if (player.Current_Hp >= (player.MaxHp -30) && player.Current_Hp <= (player.MaxHp - 1))
                     {
-                        player.Attacked_Hp = player.Hp;
+                        player.Current_Hp = player.MaxHp;
                         Rest("체력이 모두 찼습니다.");
                     }
                     else
@@ -185,7 +184,8 @@ namespace Team_B_11_RPG
 
             ConsoleUtility.PrintTextHighlights("공격력 : ", (player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", (player.Def + bonusDef).ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("체 력 : ",(player.Hp+bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("현재 체력 :" ,(player.Current_Hp +bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+
 
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
             Console.WriteLine("");
@@ -377,7 +377,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
+            Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
 
             Console.WriteLine("");
             Console.WriteLine("1. 공격");
@@ -419,7 +419,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
+            Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
             Console.WriteLine("");
             Console.WriteLine("0. 취소");
             Console.WriteLine("");
@@ -545,10 +545,10 @@ namespace Team_B_11_RPG
                   Console.WriteLine("");
                   Console.WriteLine("[내 정 보]");
                   Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-                  player.Attacked_Hp = player.Attacked_Hp - (int)MattackPower;
-                  Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
+                  player.Current_Hp = Math.Max(player.Current_Hp - (int)MattackPower,0);
+                  Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
                   Console.WriteLine("");
-                    if (player.Attacked_Hp <= 0)
+                    if (player.Current_Hp <= 0)
                     {
                         losePhase();
                     }
@@ -581,7 +581,7 @@ namespace Team_B_11_RPG
         private void losePhase()
         {
             Console.Clear();
-            int hp = player.Attacked_Hp;
+            int hp = player.Current_Hp;
             hp = 0;
             ConsoleUtility.ShowTitle("Battle - Result");
             Console.WriteLine("");
@@ -589,7 +589,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Hp} -> {hp}");
+            Console.WriteLine($"HP :{player.Current_Hp} -> {hp}");
             Console.WriteLine("");
             Console.WriteLine("0. 메인으로");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
@@ -615,7 +615,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Hp} -> {player.Attacked_Hp}");
+            Console.WriteLine($"HP :{player.MaxHp} -> {player.Current_Hp}");
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
