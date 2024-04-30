@@ -471,6 +471,11 @@ namespace Team_B_11_RPG
 
             for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
+                //랜덤 공격력
+                Random randatk = new Random();
+                double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
+                MattackPower = Math.Ceiling(MattackPower);
+
                 if (RandomMonster.randmonsters[i].IsAlive)
                 {
                     Console.Clear();
@@ -481,18 +486,34 @@ namespace Team_B_11_RPG
                     Console.WriteLine("");
                     Console.WriteLine("[내 정 보]");
                     Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-                    int attackHp = player.Hp - RandomMonster.randmonsters[i].Atk;
-                    Console.WriteLine($"HP :{attackHp}/{player.Hp}");
+                    player.Attacked_Hp = player.Attacked_Hp - (int)MattackPower;
+                    Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
                     Console.WriteLine("");
-                    //Thread.Sleep(1000);
-
+                    Console.WriteLine("0. 다음");
+                    int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                    switch (choice)
+                    {
+                        case 0:
+                            break;
+                        default:
+                            Console.WriteLine("다시 입력해주세요");
+                            break;
+                    }
                 }
                 else
                 {
-
+                    EndPhase();
                 }
             }
+            BattleAttack();
         }
+
+        private void EndPhase()
+        {
+            Console.WriteLine("Vitory");
+
+        }
+    }
         public class Program
         {
             public static void Main(string[] args)
@@ -502,4 +523,4 @@ namespace Team_B_11_RPG
             }
         }
     }
-}
+
