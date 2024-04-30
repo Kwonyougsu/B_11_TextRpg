@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.Design;
+using System.Dynamic;
 using System.Threading;
 
 namespace Team_B_11_RPG
@@ -93,10 +94,11 @@ namespace Team_B_11_RPG
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 전투");
+            Console.WriteLine("5. 회복");
             Console.WriteLine("");
 
             // 2. 선택한 결과를 검증함
-            int choice = ConsoleUtility.PromptMenuChoice(1, 4);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 5);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
@@ -113,8 +115,54 @@ namespace Team_B_11_RPG
                 case 4:
                     Battle();
                     break;
+                case 5:
+                    Rest();
+                    break;
             }
             MainMenu();
+        }
+
+        private void Rest(string? prompt = null)
+        {
+            if (prompt != null)
+            {
+                // 1초간 메시지를 띄운 다음에 다시 진행
+                Console.Clear();
+                ConsoleUtility.ShowTitle(prompt);
+                Thread.Sleep(1000);
+            } 
+
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ 회복 ■");
+            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.");
+            Console.WriteLine("");
+            Console.WriteLine("1. 사용하기");
+            Console.WriteLine("0. 나가기");
+
+            switch (ConsoleUtility.PromptMenuChoice(0, 1))
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
+                    if (player.Attacked_Hp <= (player.Hp - 31))
+                    {
+                        player.Attacked_Hp += 30;
+                        Rest("체력이 30 회복되었습니다.");
+                    }
+                    else if (player.Attacked_Hp >= (player.Hp -30) && player.Attacked_Hp <= (player.Hp - 1))
+                    {
+                        player.Attacked_Hp = player.Hp;
+                        Rest("체력이 모두 찼습니다.");
+                    }
+                    else
+                    {
+                        Rest("체력이 이미 가득차있습니다.");
+                    }                    
+                  
+                    break;
+            }
         }
 
         private void StatusMenu()
