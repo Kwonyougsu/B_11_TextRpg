@@ -24,7 +24,8 @@ namespace Team_B_11_RPG
         public int Hp { get; set; }
         public bool IsAlive { get; set; }
         public MonsterType Type { get; }
-        public RandomMonster(string name, int level, int atk, int def, int hp, MonsterType type, bool IsAlive)
+        public int Exp { get; set; }
+        public RandomMonster(string name, int level, int atk, int def, int hp, MonsterType type, bool IsAlive, int exp)
         {
             Name = name;
             Level = level;
@@ -33,6 +34,7 @@ namespace Team_B_11_RPG
             Hp = hp;
             Type = type;
             this.IsAlive = true;
+            Exp = exp;
         }
         public void MonsterBattle(bool withNumber = false, int idx = 0)
         {
@@ -73,7 +75,8 @@ namespace Team_B_11_RPG
         public int Hp { get; }
         public bool IsAlive { get; }
         public MonsterType Type { get; }
-        public Monster(string name, int level, int atk, int def, int hp, MonsterType type, bool IsAlive)
+        public int Exp { get; set; }
+        public Monster(string name, int level, int atk, int def, int hp, MonsterType type, bool IsAlive, int exp)
         {
             Name = name;
             Level = level;
@@ -82,6 +85,7 @@ namespace Team_B_11_RPG
             Hp = hp;
             Type = type;
             this.IsAlive = true;
+            Exp = exp;
         }
         public static void MakeMonster(bool withNumber = false, int idx = 0)
         {
