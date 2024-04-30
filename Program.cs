@@ -69,10 +69,10 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0);
+                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0,0);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0);
+                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0,0);
                     break;
             }
 
@@ -82,14 +82,14 @@ namespace Team_B_11_RPG
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
-                player.Atk = (10 + bonusAtk) + (player.Level * 2);
-                player.Def = (10 + bonusDef) + (player.Level * 3);
+                player.Atk = (10 + bonusAtk) + (player.Level * 0.5);
+                player.Def = (10 + bonusDef) + (player.Level * 1);
             }
             else
             {
                 player.MaxHp = (100 + bonusHp) + (player.Level * 20);
-                player.Atk = (20 + bonusAtk) + (player.Level * 2);
-                player.Def = (5 + bonusDef) + (player.Level * 3);
+                player.Atk = (20 + bonusAtk) + (player.Level * 0.5);
+                player.Def = (5 + bonusDef) + (player.Level * 1);
             }
             player.Current_Hp = player.MaxHp;
 
