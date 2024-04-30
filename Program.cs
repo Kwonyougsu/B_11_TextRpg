@@ -21,17 +21,20 @@ namespace Team_B_11_RPG
         public GameManager()
         {
             InitializeGame();
+
         }
 
         private void InitializeGame()
         {
             player = new Player("Chad", "전사", 1, 10, 5, 100, 15000);
-
             inventory = new List<Item>();
             storeInventory = new List<Item>();
             storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
             storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
             storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
+            storeInventory.Add(new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000));
+
+
         }
 
         public void StartGame()
@@ -44,6 +47,7 @@ namespace Team_B_11_RPG
         private void CreateMenu()
         {
             Console.Clear();
+
 
 
             Console.Write("원하시는 이름을 설정해주세요. : "); //이름 설정
@@ -65,6 +69,8 @@ namespace Team_B_11_RPG
                     player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000);
                     break;
             }
+
+
             MainMenu();
         }
 
@@ -128,7 +134,7 @@ namespace Team_B_11_RPG
 
             ConsoleUtility.PrintTextHighlights("공격력 : ", (player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", (player.Def + bonusDef).ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("체 력 : ", (player.Hp + bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("체 력 : ",(player.Hp+bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
 
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
             Console.WriteLine("");
