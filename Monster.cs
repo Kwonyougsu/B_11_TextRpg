@@ -17,9 +17,9 @@ namespace Team_B_11_RPG
     internal class RandomMonster
     {
         public static List<RandomMonster> randmonsters = new List<RandomMonster>();
-        public string Name { get; }
+        public string Name { get; set; }
         public int Level { get; }
-        public int Atk { get; }
+        public int Atk { get; set; }
         public int Def { get; }
         public int Hp { get; set; }
         public bool IsAlive { get; set; }
