@@ -372,6 +372,15 @@ namespace Team_B_11_RPG
             double attackPower = player.Atk * (1 - 0.1 * randatk.NextDouble());
             attackPower = Math.Ceiling(attackPower);
 
+            // 치명타 발생 여부 결정
+            bool isCritical = new Random().Next(100) < 15;
+
+            // 치명타 발생 시 공격력 증가
+            if (isCritical)
+            {
+                attackPower *= 1.6;
+            }
+
             switch (SelectMonster)
             {
                 case 0:
@@ -384,7 +393,14 @@ namespace Team_B_11_RPG
                         ConsoleUtility.ShowTitle("Battle!!");
                         Console.WriteLine("");
                         Console.WriteLine($"{player.Name}의 공격!");
-                        Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {player.Atk}");
+                        if(isCritical)
+                        {
+                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower} - 치명타 공격!!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower}");
+                        }
                         Console.WriteLine("");
 
                         RandomMonster selectedMonster = RandomMonster.randmonsters[SelectMonster - 1];
@@ -429,22 +445,6 @@ namespace Team_B_11_RPG
                                     break;
                             }
                         }
-                        // 랜덤 치명타 발생 여부를 판단
-                        bool isCritical = new Random().Next(100) < 30;
-
-                        // 치명타가 발생하면 데미지를 1.6배로 증가시킴
-                        double damage = isCritical ? player.Atk * 1.6 : player.Atk;
-
-                        Console.WriteLine($"{player.Name}의 공격!");
-                        if ( isCritical )
-                        {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster -1].Name}을(를) 공격했습니다. [데미지 : {damage}] - 치명타 공격!!");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지 : {damage}]");
-                        }
-                    
                     }
                     else
                     {
