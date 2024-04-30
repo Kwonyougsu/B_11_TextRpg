@@ -15,10 +15,6 @@ namespace Team_B_11_RPG
 
         private List<Item> storeInventory;
 
-
-
-
-
         enum PlayerChoice
         {
             MainMenu,
@@ -31,10 +27,9 @@ namespace Team_B_11_RPG
 
         }
 
-
         private void InitializeGame()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100);
+            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100,0);
 
             inventory = new List<Item>();
             storeInventory = new List<Item>();
@@ -432,6 +427,7 @@ namespace Team_B_11_RPG
                     break;
             }
         }
+
         private void BattleAttack(string? prompt = null)
         {
             if (prompt != null)
@@ -645,9 +641,14 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine($"던전에서 몬스터 {RandomMonster.randmonsters.Count}마리를 잡았습니다");
             Console.WriteLine("");
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.MaxHp} -> {player.Current_Hp}");
+            for(int i =0; i < RandomMonster.randmonsters.Count; i++)
+            {
+                if (player.Exp >= 0)
+                {
+                    player.GetExp(RandomMonster.randmonsters[i].Level);
+                }
+            }
+            player.PlayerLevelUp();
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
@@ -666,7 +667,6 @@ namespace Team_B_11_RPG
 
         public class Program
         {
-        
             public static void Main(string[] args)
             {
                 GameManager gameManager = new GameManager();
