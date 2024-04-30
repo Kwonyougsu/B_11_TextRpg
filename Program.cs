@@ -16,6 +16,9 @@ namespace Team_B_11_RPG
         private List<Item> storeInventory;
 
 
+
+
+
         enum PlayerChoice
         {
             MainMenu,
@@ -27,6 +30,7 @@ namespace Team_B_11_RPG
             InitializeGame();
 
         }
+
 
         private void InitializeGame()
         {
@@ -65,13 +69,30 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(player.Name, "탱커", 1, 10, 10, 150, 15000,150);
+                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 20, 5, 10, 15000,10);
+                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0);
                     break;
             }
-            
+
+            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            if (player.Job == "탱커")
+            {
+                player.MaxHp = (150 + bonusHp) + (player.Level * 20);
+                player.Atk = (10 + bonusAtk) + (player.Level * 2);
+                player.Def = (10 + bonusDef) + (player.Level * 3);
+            }
+            else
+            {
+                player.MaxHp = (100 + bonusHp) + (player.Level * 20);
+                player.Atk = (20 + bonusAtk) + (player.Level * 2);
+                player.Def = (5 + bonusDef) + (player.Level * 3);
+            }
+            player.Current_Hp = player.MaxHp;
+
 
 
             MainMenu();
@@ -177,14 +198,25 @@ namespace Team_B_11_RPG
             Console.WriteLine($"{player.Name} ( {player.Job} )");
 
             // TODO : 능력치 강화분을 표현하도록 변경
-
             int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
             int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
             int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            if (player.Job == "탱커")
+            {
+                player.MaxHp = (150 + bonusHp) + (player.Level * 20);
+                player.Atk = (10 + bonusAtk) + (player.Level * 2);
+                player.Def = (10 + bonusDef) + (player.Level * 3);
+            }
+            else
+            {
+                player.MaxHp = (100 + bonusHp) + (player.Level * 20);
+                player.Atk = (20 + bonusAtk) + (player.Level * 2);
+                player.Def = (5 + bonusDef) + (player.Level * 3);
+            }
 
-            ConsoleUtility.PrintTextHighlights("공격력 : ", (player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
-            ConsoleUtility.PrintTextHighlights("방어력 : ", (player.Def + bonusDef).ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("현재 체력 :" ,(player.Current_Hp +bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("공격력 : ", player.Atk.ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
+            ConsoleUtility.PrintTextHighlights("방어력 : ", player.Def.ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
+            ConsoleUtility.PrintTextHighlights("현재 체력 :", player.Current_Hp.ToString()+" / "+player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
 
 
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
@@ -629,9 +661,12 @@ namespace Team_B_11_RPG
                     break;
             }
         }
+
     }
+
         public class Program
         {
+        
             public static void Main(string[] args)
             {
                 GameManager gameManager = new GameManager();
