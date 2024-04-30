@@ -1,6 +1,10 @@
 using System;
 using System.ComponentModel.Design;
+<<<<<<< HEAD
+using System.Runtime.CompilerServices;
+=======
 using System.Dynamic;
+>>>>>>> main
 using System.Threading;
 
 namespace Team_B_11_RPG
@@ -504,8 +508,9 @@ namespace Team_B_11_RPG
                     }
                     else
                     {
-                        RandomMonster.randmonsters[SelectMonster - 1].IsAliveToggle();
-                        EnemyPhase();
+                        Console.WriteLine("이미 죽은 몬스터를 공격할 수 없습니다.다시 입력해주세요");
+                        Thread.Sleep(2000);
+                        BattleAttack();
                         break;
                     }
                     EnemyPhase();
@@ -524,50 +529,57 @@ namespace Team_B_11_RPG
             }
             Console.Clear();
             ConsoleUtility.ShowTitle("Battle!!");
+            bool MonsterAlive = false;
 
             for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
-                //랜덤 공격력
-                Random randatk = new Random();
-                double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
-                MattackPower = Math.Ceiling(MattackPower);
-
-                if (RandomMonster.randmonsters[i].IsAlive)
-                {
-                    Console.Clear();
-                    ConsoleUtility.ShowTitle("Battle!!");
-                    Console.WriteLine("");
-                    Console.WriteLine($"{RandomMonster.randmonsters[i].Name}의 공격!");
-                    Console.WriteLine($"{player.Name}을(를) 공격했습니다. [데미지] : {RandomMonster.randmonsters[i].Atk}");
-                    Console.WriteLine("");
-                    Console.WriteLine("[내 정 보]");
-                    Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-                    player.Attacked_Hp = player.Attacked_Hp - (int)MattackPower;
-                    Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
-                    Console.WriteLine("");
-                    Console.WriteLine("0. 다음");
-                    int choice = ConsoleUtility.PromptMenuChoice(0, 0);
-                    switch (choice)
-                    {
-                        case 0:
-                            break;
-                        default:
-                            Console.WriteLine("다시 입력해주세요");
-                            break;
-                    }
-                }
-                else
-                {
-                 //변경점
-                    EndPhase();
-                }
+              //랜덤 공격력
+              Random randatk = new Random();
+              double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
+              MattackPower = Math.Ceiling(MattackPower);
+              
+              if (RandomMonster.randmonsters[i].IsAlive)
+              {
+                  Console.Clear();
+                  ConsoleUtility.ShowTitle("Battle!!");
+                  Console.WriteLine("");
+                  Console.WriteLine($"{RandomMonster.randmonsters[i].Name}의 공격!");
+                  Console.WriteLine($"{player.Name}을(를) 공격했습니다. [데미지] : {RandomMonster.randmonsters[i].Atk}");
+                  Console.WriteLine("");
+                  Console.WriteLine("[내 정 보]");
+                  Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
+                  player.Attacked_Hp = player.Attacked_Hp - (int)MattackPower;
+                  Console.WriteLine($"HP :{player.Attacked_Hp}/{player.Hp}");
+                  Console.WriteLine("");
+                  Console.WriteLine("0. 다음");
+                  int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                  switch (choice)
+                  {
+                      case 0:
+                          break;
+                      default:
+                          Console.WriteLine("다시 입력해주세요");
+                          break;
+                  }
+              }
+              if (RandomMonster.randmonsters[i].IsAlive)
+              {
+                  MonsterAlive = true; // 현재 conunt i에 몬스터가 살아있으면 살림
+              }
             }
-            BattleAttack();
+            if (!MonsterAlive) // 몬스터 죽으면 넘어감
+            {
+                EndPhase();
+            }
+            else 
+            {
+                BattleAttack();
+            }
         }
 
         private void EndPhase()
         {
-            Console.WriteLine("Vitory");
+            
 
         }
     }
