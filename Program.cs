@@ -1,6 +1,10 @@
-﻿using System;
+using System;
 using System.ComponentModel.Design;
+<<<<<<< HEAD
 using System.Runtime.CompilerServices;
+=======
+using System.Dynamic;
+>>>>>>> main
 using System.Threading;
 
 namespace Team_B_11_RPG
@@ -22,6 +26,7 @@ namespace Team_B_11_RPG
         public GameManager()
         {
             InitializeGame();
+
         }
 
         private void InitializeGame()
@@ -33,6 +38,9 @@ namespace Team_B_11_RPG
             storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
             storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
             storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
+            storeInventory.Add(new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000));
+
+
         }
 
         public void StartGame()
@@ -45,6 +53,7 @@ namespace Team_B_11_RPG
         private void CreateMenu()
         {
             Console.Clear();
+
 
 
             Console.Write("원하시는 이름을 설정해주세요. : "); //이름 설정
@@ -66,6 +75,9 @@ namespace Team_B_11_RPG
                     player = new Player(player.Name, "딜러", 1, 20, 5, 100, 15000,100);
                     break;
             }
+            
+
+
             MainMenu();
         }
 
@@ -86,10 +98,11 @@ namespace Team_B_11_RPG
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 전투");
+            Console.WriteLine("5. 회복");
             Console.WriteLine("");
 
             // 2. 선택한 결과를 검증함
-            int choice = ConsoleUtility.PromptMenuChoice(1, 4);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 5);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
@@ -106,8 +119,54 @@ namespace Team_B_11_RPG
                 case 4:
                     Battle();
                     break;
+                case 5:
+                    Rest();
+                    break;
             }
             MainMenu();
+        }
+
+        private void Rest(string? prompt = null)
+        {
+            if (prompt != null)
+            {
+                // 1초간 메시지를 띄운 다음에 다시 진행
+                Console.Clear();
+                ConsoleUtility.ShowTitle(prompt);
+                Thread.Sleep(1000);
+            } 
+
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ 회복 ■");
+            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.");
+            Console.WriteLine("");
+            Console.WriteLine("1. 사용하기");
+            Console.WriteLine("0. 나가기");
+
+            switch (ConsoleUtility.PromptMenuChoice(0, 1))
+            {
+                case 0:
+                    MainMenu();
+                    break;
+                case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
+                    if (player.Attacked_Hp <= (player.Hp - 31))
+                    {
+                        player.Attacked_Hp += 30;
+                        Rest("체력이 30 회복되었습니다.");
+                    }
+                    else if (player.Attacked_Hp >= (player.Hp -30) && player.Attacked_Hp <= (player.Hp - 1))
+                    {
+                        player.Attacked_Hp = player.Hp;
+                        Rest("체력이 모두 찼습니다.");
+                    }
+                    else
+                    {
+                        Rest("체력이 이미 가득차있습니다.");
+                    }                    
+                  
+                    break;
+            }
         }
 
         private void StatusMenu()
@@ -129,7 +188,7 @@ namespace Team_B_11_RPG
 
             ConsoleUtility.PrintTextHighlights("공격력 : ", (player.Atk + bonusAtk).ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", (player.Def + bonusDef).ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("체 력 : ", (player.Hp + bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("체 력 : ",(player.Hp+bonusHp).ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
 
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
             Console.WriteLine("");
@@ -373,6 +432,15 @@ namespace Team_B_11_RPG
             double attackPower = player.Atk * (1 - 0.1 * randatk.NextDouble());
             attackPower = Math.Ceiling(attackPower);
 
+            // 치명타 발생 여부 결정
+            bool isCritical = new Random().Next(100) < 15;
+
+            // 치명타 발생 시 공격력 증가
+            if (isCritical)
+            {
+                attackPower *= 1.6;
+            }
+
             switch (SelectMonster)
             {
                 case 0:
@@ -385,7 +453,14 @@ namespace Team_B_11_RPG
                         ConsoleUtility.ShowTitle("Battle!!");
                         Console.WriteLine("");
                         Console.WriteLine($"{player.Name}의 공격!");
-                        Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {player.Atk}");
+                        if(isCritical)
+                        {
+                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower} - 치명타 공격!!");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower}");
+                        }
                         Console.WriteLine("");
 
                         RandomMonster selectedMonster = RandomMonster.randmonsters[SelectMonster - 1];
@@ -430,22 +505,6 @@ namespace Team_B_11_RPG
                                     break;
                             }
                         }
-                        // 랜덤 치명타 발생 여부를 판단
-                        bool isCritical = new Random().Next(100) < 30;
-
-                        // 치명타가 발생하면 데미지를 1.6배로 증가시킴
-                        double damage = isCritical ? player.Atk * 1.6 : player.Atk;
-
-                        Console.WriteLine($"{player.Name}의 공격!");
-                        if ( isCritical )
-                        {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster -1].Name}을(를) 공격했습니다. [데미지 : {damage}] - 치명타 공격!!");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지 : {damage}]");
-                        }
-                    
                     }
                     else
                     {

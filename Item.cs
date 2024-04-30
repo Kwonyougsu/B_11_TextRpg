@@ -62,8 +62,8 @@ internal class Item
         Console.Write(" | ");
 
         if (Atk != 0) Console.Write($"공격력 {(Atk >= 0 ? "+" : "")}{Atk} ");
-        if (Def != 0) Console.Write($"방어력 {(Atk >= 0 ? "+" : "")}{Def} ");
-        if (Hp != 0) Console.Write($"체  력 {(Atk >= 0 ? "+" : "")}{Hp} ");
+        if (Def != 0) Console.Write($"방어력 {(Def >= 0 ? "+" : "")}{Def} ");
+        if (Hp != 0) Console.Write($"체  력 {(Hp >= 0 ? "+" : "")}{Hp} ");
 
         Console.Write(" | ");
 
@@ -115,4 +115,5 @@ internal class Item
     {
         IsPurchased = true;
     }
+
 }
