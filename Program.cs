@@ -408,13 +408,7 @@ namespace Team_B_11_RPG
                         RandomMonster.randmonsters[Choice - 1].IsAliveToggle();
                         BattleAttack();
                     }
-                    //if (RandomMonster.randmonsters[Choice - 1].IsAlive)
-                    //{
-                    //    Console.ForegroundColor = ConsoleColor.Gray;
-                    //    Console.WriteLine($"Lv.{RandomMonster.randmonsters[Choice - 1].Level} {RandomMonster.randmonsters[Choice - 1].Name} Dead");
-                    //    Console.ResetColor();
-                    //    BattleAttack();
-                    //}
+
                     BattleAttack();
                     break;
             }
