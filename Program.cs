@@ -502,6 +502,7 @@ namespace Team_B_11_RPG
                 }
                 else
                 {
+                 //변경점
                     EndPhase();
                 }
             }
