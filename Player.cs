@@ -1,5 +1,9 @@
-﻿internal class Player
+﻿using System.Numerics;
+using Team_B_11_RPG;
+
+internal class Player
 {
+    private int PlayerExp = 0;
     public string Name { get; set; }
     public string Job { get; }
     public int Level { get; }
@@ -20,6 +24,20 @@
         Gold = gold;
         Current_Hp = current_hp;
         Exp = exp;
+    }
+    
+    public void GetExp(int monsterexp)
+    {
+        PlayerExp += monsterexp;
+    }
+    public void PlayerLevelUp() 
+    {
+        
+        Console.WriteLine(PlayerExp);
+        Console.WriteLine("[내 정 보]");
+        Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+        Console.WriteLine($"HP :{MaxHp} -> {Current_Hp}");
+        PlayerExp = 0;
     }
 
 }
