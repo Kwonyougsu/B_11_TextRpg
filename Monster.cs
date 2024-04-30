@@ -54,7 +54,9 @@ namespace Team_B_11_RPG
                 Console.Write($"{Name}  ");
                 Console.Write($"방어력 {(Def >= 0 ? "" : "")}{Def} ");
                 Console.Write($"HP {(Hp >= 0 ? "" : "")}{Hp}");
+                Console.WriteLine("");
             }
+
         }
         internal void IsAliveToggle()
         {
