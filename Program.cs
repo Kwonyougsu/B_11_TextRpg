@@ -6,6 +6,7 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Drawing;
 
 namespace Team_B_11_RPG
 {
@@ -675,6 +676,7 @@ namespace Team_B_11_RPG
             }
             player.PlayerLevelUp();
             player.DungeonResult();
+            player.floor = player.floor + 1;
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);

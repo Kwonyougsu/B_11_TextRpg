@@ -109,7 +109,7 @@ namespace Team_B_11_RPG
             this.IsAlive = true;
         }
         public static void MakeMonster()
-        {
+        {//0~2 1층 , 3~5 2층, 6~8 3층, 9~11 4층
             monsters.Add(new Monster("미니언", 2, 5, 0, 15, MonsterType.small, true));
             monsters.Add(new Monster("공허충", 3, 9, 0, 10, MonsterType.small, true));
             monsters.Add(new Monster("대포미니언", 5, 8, 0, 25, MonsterType.small, true));
