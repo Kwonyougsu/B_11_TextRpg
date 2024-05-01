@@ -10,7 +10,6 @@ internal class Player
     Random random = new Random();
 
     public static List<Item> inventory;
-    public List<Item> monsterDropList = new List<Item>();
 
     public string Name { get; set; }
     public string Job { get; }
