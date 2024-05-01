@@ -11,7 +11,7 @@ namespace Team_B_11_RPG
     public class GameManager
     {
         private Player player;
-        private List<Item> inventory;
+        //private List<Item> inventory;
 
         private List<Item> storeInventory;
 
@@ -36,14 +36,16 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100,0);
+            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100,0, 3);
 
-            inventory = new List<Item>();
-            storeInventory = new List<Item>();
-            storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
-            storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
-            storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
-            storeInventory.Add(new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000));
+            Player.inventory = new List<Item>();
+            storeInventory = new List<Item>
+            {
+                new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500),
+                new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
+                new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000),
+                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000)
+            }; // 아이템 리스트 단순화
 
             quests = new List<QuestList>();
             quests.Add(new QuestList("아이템을 장착하자1", "아이템 장착하기", RewardType.GOLD1 , false));
@@ -79,16 +81,16 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0,0);
+                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0,0);
+                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3);
                     break;
             }
 
-            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
-            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
-            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
@@ -170,7 +172,7 @@ namespace Team_B_11_RPG
             Console.Clear();
 
             ConsoleUtility.ShowTitle("■ 회복 ■");
-            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.");
+            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다. 남은 포션 : " + player.Postion + "개");
             Console.WriteLine("");
             Console.WriteLine("1. 사용하기");
             Console.WriteLine("0. 나가기");
@@ -181,17 +183,23 @@ namespace Team_B_11_RPG
                     MainMenu();
                     break;
                 case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
-                    if (player.Current_Hp <= (player.MaxHp - 31))
+                    if (player.Current_Hp <= (player.MaxHp - 31) && player.Postion >= 1)
                     {
                         player.Current_Hp += 30;
+                        player.Postion -= 1;
                         Rest("체력이 30 회복되었습니다.");
                     }
-                    else if (player.Current_Hp >= (player.MaxHp -30) && player.Current_Hp <= (player.MaxHp - 1))
+                    else if (player.Current_Hp >= (player.MaxHp -30) && player.Current_Hp <= (player.MaxHp - 1) && player.Postion >= 1)
                     {
                         player.Current_Hp = player.MaxHp;
+                        player.Postion -= 1;
                         Rest("체력이 모두 찼습니다.");
                     }
-                    else
+                    else if (player.Postion == 0)
+                    {
+                        Rest("포션이 부족합니다.");
+                    }
+                    else 
                     {
                         Rest("체력이 이미 가득차있습니다.");
                     }                    
@@ -212,9 +220,9 @@ namespace Team_B_11_RPG
             Console.WriteLine($"{player.Name} ( {player.Job} )");
 
             // TODO : 능력치 강화분을 표현하도록 변경
-            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
-            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
-            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
@@ -256,9 +264,9 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
 
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < Player.inventory.Count; i++)
             {
-                inventory[i].PrintItemStatDescription();
+                Player.inventory[i].PrintItemStatDescription();
             }
 
             Console.WriteLine("");
@@ -285,14 +293,14 @@ namespace Team_B_11_RPG
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < Player.inventory.Count; i++)
             {
-                inventory[i].PrintItemStatDescription(true, i + 1); // 나가기가 0번 고정, 나머지가 1번부터 배정
+                Player.inventory[i].PrintItemStatDescription(true, i + 1); // 나가기가 0번 고정, 나머지가 1번부터 배정
             }
             Console.WriteLine("");
             Console.WriteLine("0. 나가기");
 
-            int KeyInput = ConsoleUtility.PromptMenuChoice(0, inventory.Count);
+            int KeyInput = ConsoleUtility.PromptMenuChoice(0, Player.inventory.Count);
 
             switch (KeyInput)
             {
@@ -300,7 +308,7 @@ namespace Team_B_11_RPG
                     InventoryMenu();
                     break;
                 default:
-                    inventory[KeyInput - 1].ToggleEquipStatus();
+                    Player.inventory[KeyInput - 1].ToggleEquipStatus();
                     EquipMenu();
                     break;
             }
@@ -381,7 +389,7 @@ namespace Team_B_11_RPG
                     {
                         player.Gold -= storeInventory[keyInput - 1].Price;
                         storeInventory[keyInput - 1].Purchase();
-                        inventory.Add(storeInventory[keyInput - 1]);
+                        Player.inventory.Add(storeInventory[keyInput - 1]);
                         PurchaseMenu();
                     }
                     // 3 : 돈이 모자라는 경우
@@ -479,10 +487,18 @@ namespace Team_B_11_RPG
             // 치명타 발생 여부 결정
             bool isCritical = new Random().Next(100) < 15;
 
+            // 회피 발생 여부 결정
+            bool isDodge = new Random().Next(100) < 10;
+
             // 치명타 발생 시 공격력 증가
             if (isCritical)
             {
                 attackPower *= 1.6;
+                attackPower = (int)Math.Ceiling(attackPower); // 정수로 변환
+            }
+            else
+            {
+                attackPower = (int)Math.Ceiling(attackPower); // 정수로 변환
             }
 
             switch (SelectMonster)
@@ -497,46 +513,74 @@ namespace Team_B_11_RPG
                         ConsoleUtility.ShowTitle("Battle!!");
                         Console.WriteLine("");
                         Console.WriteLine($"{player.Name}의 공격!");
-                        if(isCritical)
+                        if (isDodge)
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower} - 치명타 공격!!");
+                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
                         }
                         else
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower}");
+                            if (isCritical)
+                            {
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower} - 치명타 공격!!");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower}");
+                            }
                         }
                         Console.WriteLine("");
-
-                        RandomMonster selectedMonster = RandomMonster.randmonsters[SelectMonster - 1];
-
-                        int monsterhp = selectedMonster.Hp - (int)attackPower;
-                        if (monsterhp <= 0)
+                        // 회피가 발생하지 않은 경우에만 공격 처리
+                        if (!isDodge)
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
-                            Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Dead");
-                            selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
-                            Console.WriteLine("");
-                            Console.WriteLine("0. 다음");
-                            Console.WriteLine("");
-                            selectedMonster.IsAliveToggle();
-                            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
-
-                            switch (choice)
+                            // 공격 결과 계산 및 출력
+                            RandomMonster selectedMonster = RandomMonster.randmonsters[SelectMonster - 1];
+                            int monsterhp = selectedMonster.Hp - (int)attackPower;
+                            if (monsterhp <= 0)
                             {
-                                case 0:
-                                    EnemyPhase();
-                                    break;
-                                default:
-                                    Console.WriteLine("다시 입력해주세요");
-                                    break;
+                                // 몬스터 사망 처리
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
+                                Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Dead");
+                                selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
+                                Console.WriteLine("");
+                                Console.WriteLine("0. 다음");
+                                Console.WriteLine("");
+                                selectedMonster.IsAliveToggle();
+                                int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+
+                                switch (choice)
+                                {
+                                    case 0:
+                                        EnemyPhase();
+                                        break;
+                                    default:
+                                        Console.WriteLine("다시 입력해주세요");
+                                        break;
+                                }
+                            }
+
+                            else
+                            {
+                                // 몬스터가 살아있는 경우에는 Hp 갱신 후 다음 단계로 진행
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
+                                Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Hp : {monsterhp}");
+                                selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
+                                Console.WriteLine("");
+                                Console.WriteLine("0. 다음");
+                                int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                                switch (choice)
+                                {
+                                    case 0:
+                                        EnemyPhase();
+                                        break;
+                                    default:
+                                        Console.WriteLine("다시 입력해주세요");
+                                        break;
+                                }
                             }
                         }
                         else
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
-                            Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Hp : {monsterhp}");
-                            selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
-                            Console.WriteLine("");
+                            // 회피가 발생한 경우에는 다음 단계로 진행
                             Console.WriteLine("0. 다음");
                             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
                             switch (choice)
@@ -668,6 +712,7 @@ namespace Team_B_11_RPG
                 }
             }
             player.PlayerLevelUp();
+            player.DungeonResult();
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
