@@ -6,6 +6,7 @@ internal class Player
     private int PlayerExp = 0;
     private int MaxExp = 0;
     private int[] requireExp = {0,10, 35, 65, 100 };
+    Random random = new Random();
     public string Name { get; set; }
     public string Job { get; }
     public int Level { get; set; }
@@ -15,7 +16,8 @@ internal class Player
     public int Gold { get; set; }
     public int Current_Hp { get; set; }
     public int Exp { get; set; }
-    public Player(string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp)
+    public int Postion { get; set; }
+    public Player(string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp,int postion)
     {
         Name = name;
         Job = job;
@@ -26,6 +28,7 @@ internal class Player
         Gold = gold;
         Current_Hp = current_hp;
         Exp = exp;
+        Postion = postion;
     }
     
     public void GetExp(int monsterexp)
@@ -62,10 +65,18 @@ internal class Player
     }
     public void DungeonResult()
     {
+        int gold = random.Next(100, 500);
+        int postion = random.Next(0, 2);
         Console.WriteLine("");
         Console.WriteLine("[획득 아이템]");
-        Console.WriteLine();
-        Console.WriteLine();
+        ConsoleUtility.ShowTitle($"{gold} G");
+        Gold = Gold+gold;
+        if(postion != 0)
+        {
+            Console.Write("포션 - ");
+            ConsoleUtility.ShowTitle($"{postion}");
+            Postion = Postion + postion;
+        }
         Console.WriteLine();
     }
 
