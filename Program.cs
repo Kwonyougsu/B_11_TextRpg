@@ -10,6 +10,7 @@ namespace Team_B_11_RPG
 
         private List<Item> storeInventory;
         private List<QuestList> quests;
+        private List<QuestList> questsAccept;
 
         public GameManager()
         {
@@ -29,7 +30,9 @@ namespace Team_B_11_RPG
 
             quests = new List<QuestList>();
 
-            quests.Add(new QuestList("아이템을 장착하자!" , "아이템을 장착해봅시다 " , RewardType.GOLD , true));
+            quests.Add(new QuestList("아이템을 장착하자!" , "아이템을 장착해봅시다 " , RewardType.GOLD , false));
+            quests.Add(new QuestList("미니언을 잡아보자!" , "미니언을 잡아봅시다" , RewardType .GOLD , false));
+            quests.Add(new QuestList("미니언을 잡아보자!", "미니언을 잡아봅시다", RewardType.GOLD, false));
         }
 
         public void StartGame()
@@ -327,12 +330,66 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("Quest!!");
             Console.WriteLine("");
-            for(int i = 0; i<quests.Count; i++)
+            for(int i = 0; i<3; i++)
             {
-                Console.WriteLine($"{i} . {quests[i].QuestName}");
+                Console.WriteLine($"{i+1} . {quests[i].QuestName}");
             }
             Console.WriteLine("");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
+            int choice = ConsoleUtility.PromptMenuChoice(0, quests.Count);
+            for (int i = 0; i < 3; i++) {
+                if (choice == i+1)
+                {
+                    Console.Clear();
+                    Console.WriteLine("");
+                    ConsoleUtility.ShowTitle("Quest!!");
+                    Console.WriteLine("");
+                    Console.WriteLine($"{quests[i].QuestName}");
+                    Console.WriteLine("");
+                    Console.WriteLine($"{quests[i].QuestDetail}");
+                    Console.WriteLine("");
+                    Console.WriteLine("퀘스트 내용");
+                    Console.WriteLine("");
+                    Console.WriteLine("보상");
+                    if (quests[i].IsAccept == true)
+                    {
+                        Console.WriteLine("1.보상받기");
+                        Console.WriteLine("2,돌아 가기");
+                    }
+                    else
+                    {
+                        Console.WriteLine("1.퀘스트수락");
+                        Console.WriteLine("2,돌아 가기");
+                    }
+                    int questAccept = ConsoleUtility.PromptMenuChoice(0, 2);
+
+                    switch(questAccept)
+                    {
+                        case 1:
+                            if (quests[i].IsAccept == false)
+                            {
+                                QuestList.QuestContents(quests[i].RewardType);
+                                quests[i].IsAccept = true;
+                            }
+                            else if (quests[i].IsAccept == true)
+                            {
+                                quests.RemoveAt(i);
+                            }
+                            break;
+
+                        case 2:
+                        Quest();
+                        break;
+                    }
+
+                }
+                else if (i >= 3)
+                {
+                    Console.WriteLine("잘못된 입력입니다!");
+                    Thread.Sleep(1000);
+                    Quest();
+                }
+            }
+            
 
         }
     }
