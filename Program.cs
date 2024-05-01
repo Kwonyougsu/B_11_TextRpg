@@ -35,13 +35,11 @@ namespace Team_B_11_RPG
         public GameManager()
         {
             InitializeGame();
-
         }
 
         private void InitializeGame()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100,0, 3);
-
+            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3);
             Player.inventory = new List<Item>();
             storeInventory = new List<Item>
             {
@@ -57,16 +55,21 @@ namespace Team_B_11_RPG
             quests.Add(new QuestList("아이템을 장착하자3", "아이템 장착하기", RewardType.ITEM2, false));
             quests.Add(new QuestList("아이템을 장착하자4", "아이템 장착하기", RewardType.ITEM3, false));
             quests.Add(new QuestList("아이템을 장착하자5", "아이템 장착하기", RewardType.ITEM4, false));
-
-
-
         }
 
         public void StartGame()
         {
             Console.Clear();
             ConsoleUtility.PrintGameHeader();
-            CreateMenu();
+            if (File.Exists("playerfile.json"))
+            {
+                player = Player.Load("playerfile.json");
+                MainMenu();
+            }
+            else
+            {
+                CreateMenu();
+            }
         }
 
         private void CreateMenu()
@@ -108,9 +111,6 @@ namespace Team_B_11_RPG
                 player.Def = (5 + bonusDef) + (player.Level * 1);
             }
             player.Current_Hp = player.MaxHp;
-
-
-
             MainMenu();
         }
 
@@ -134,10 +134,13 @@ namespace Team_B_11_RPG
             Console.WriteLine($"  ({player.floor})층");
             Console.WriteLine("5. 회복");
             Console.WriteLine("6. 퀘스트");
+            Console.WriteLine("7. 저장하기");
+            Console.WriteLine("");
+            Console.WriteLine("0. 이름 변경하기");
             Console.WriteLine("");
 
             // 2. 선택한 결과를 검증함
-            int choice = ConsoleUtility.PromptMenuChoice(1, 6);
+            int choice = ConsoleUtility.PromptMenuChoice(0, 7);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
@@ -159,6 +162,12 @@ namespace Team_B_11_RPG
                     break;
                 case 6:
                     Quest();
+                    break;
+                case 7:
+                    SavePlayerData();
+                    break;
+                case 0:
+                    ReName();
                     break;
             }
             MainMenu();
@@ -418,8 +427,8 @@ namespace Team_B_11_RPG
 
             player.DungeonFloor();
             Console.WriteLine("");
-            Console.WriteLine("1. 공격");
             Console.WriteLine("0. 돌아가기");
+            Console.WriteLine("1. 공격");
             Console.WriteLine("");
             int choice = ConsoleUtility.PromptMenuChoice(0, 1);
 
@@ -459,14 +468,14 @@ namespace Team_B_11_RPG
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
             Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
             Console.WriteLine("");
-            Console.WriteLine("0. 취소");
+            Console.WriteLine("0. 도망가기");
             Console.WriteLine("");
             int SelectMonster = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count);
             //랜덤 공격력
             Random randatk = new Random();
             double attackPower = player.Atk * (1 - 0.1 * randatk.NextDouble());
             attackPower = Math.Ceiling(attackPower);
-
+            int Run = randatk.Next(0, 10);
             // 치명타 발생 여부 결정
             bool isCritical = new Random().Next(100) < 15;
 
@@ -487,7 +496,20 @@ namespace Team_B_11_RPG
             switch (SelectMonster)
             {
                 case 0:
-                    Battle();
+                    if (Run > 2)
+                    {
+                        Console.WriteLine("도주에 성공 했습니다.");
+                        Console.WriteLine("마을로 돌아갑니다.");
+                        Thread.Sleep(2000);
+                        MainMenu();
+                    }
+                    else
+                    {
+                        Console.WriteLine("도주에 실패 했습니다.");
+                        Console.WriteLine("선공권을 빼앗겼습니다");
+                        Thread.Sleep(2000);
+                        EnemyPhase();
+                    }
                     break;
                 default:
                     if (RandomMonster.randmonsters[SelectMonster - 1].Hp >= 0 && RandomMonster.randmonsters[SelectMonster - 1].IsAlive)
@@ -727,14 +749,20 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             for(int i = 0; i <3; i++)
             {
-                if (i >= quests.Count) { break; }
+                if (i >= quests.Count) 
+                { 
+                    break;
+                }
                 Console.WriteLine($"{i+1} . {quests[i].QuestName}");
             }
             Console.WriteLine("");
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("");
             int choice = ConsoleUtility.PromptMenuChoice(0, quests.Count);
-            if (choice == 0) MainMenu();
+            if (choice == 0)
+            {
+                MainMenu();
+            }
             Console.Clear();
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("퀘스트목록");
@@ -807,6 +835,24 @@ namespace Team_B_11_RPG
 
         }
 
+        public void SavePlayerData()
+        {
+            Console.Clear();
+            player.Save("playerfile.json");
+            Console.WriteLine("플레이어 정보가 저장되었습니다.");
+            Thread.Sleep(2000);
+            MainMenu();
+
+        }
+        public void ReName()
+        {
+            Console.Clear();
+            Console.Write("이름을 설정해주세요. : "); 
+            player.Name = Console.ReadLine();
+            Console.WriteLine($"플레이어 이름이{player.Name}으로 변경되었습니다.");
+            Thread.Sleep(2000);
+            MainMenu();
+        }
     }
 
         public class Program
@@ -815,7 +861,8 @@ namespace Team_B_11_RPG
             {
                 GameManager gameManager = new GameManager();
                 gameManager.StartGame();
-            }
+                //gameManager.SavePlayerData();
+        }
         }
     }
 
