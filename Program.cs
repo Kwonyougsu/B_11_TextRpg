@@ -14,7 +14,7 @@ namespace Team_B_11_RPG
         private List<Item> inventory;
 
         private List<Item> storeInventory;
-        private int potionCount = 3;
+        private int potionCount = 10;
 
         enum PlayerChoice
         {
