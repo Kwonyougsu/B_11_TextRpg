@@ -17,6 +17,7 @@ namespace Team_B_11_RPG
     internal class RandomMonster
     {
         public static List<RandomMonster> randmonsters = new List<RandomMonster>();
+        public static List<Item> monsterdrop = new List<Item>();
         public string Name { get; set; }
         public int Level { get; }
         public int Atk { get; set; }
@@ -62,6 +63,29 @@ namespace Team_B_11_RPG
         {
             IsAlive = !IsAlive;
         }
+        public static void MonsterDropTable()
+        {// 0~3 낡은 4~7 고급 8~11 빛나는 12 ~ 15 지배자 
+            monsterdrop.Add(new Item("낡은 단검", "낡은 단검.", ItemType.WEAPON, 3, 0, 0, 1000));
+            monsterdrop.Add(new Item("낡은 대검", "낡은 대검.", ItemType.WEAPON, 3, 0, 0, 1000));
+            monsterdrop.Add(new Item("낡은 갑옷", "낡은 갑옷.", ItemType.ARMOR, 0, 3, 0, 1000));
+            monsterdrop.Add(new Item("낡은 투구", "낡은 대검.", ItemType.ARMOR, 0, 2, 0, 1000));
+
+            monsterdrop.Add(new Item("고급 단검", "고급스러운 단검, 날카롭다", ItemType.WEAPON, 3, 0, 0, 10000));
+            monsterdrop.Add(new Item("고급 대검", "고급스러운 대검, 크기가 크며 묵직하다", ItemType.WEAPON, 3, 0, 0, 1000));
+            monsterdrop.Add(new Item("고급 갑옷", "고급스러운 갑옷, 착용자의 몸에 딱 맞게 조절이 가능하다", ItemType.ARMOR, 0, 30, 0, 10000));
+            monsterdrop.Add(new Item("고급 투구", "고급스러운 대검, 착용자의 머리에 딱 맞게 조절이 가능하다", ItemType.ARMOR, 0, 20, 0, 10000));
+
+            monsterdrop.Add(new Item("빛나는 단검", "빛이나는 단검, 가운데에 보석이 박혀있으며 날카롭다", ItemType.WEAPON, 3, 0, 0, 10000));
+            monsterdrop.Add(new Item("빛나는 대검", "빛이나는 대검, 가운데에 보석이 박혀있으며 가벼운 느낌이 든다", ItemType.WEAPON, 3, 0, 0, 1000));
+            monsterdrop.Add(new Item("빛나는 갑옷", "빛이나는 갑옷, 가운데에 보석이 박혀있으며 가벼운 느낌이 든다", ItemType.ARMOR, 0, 50, 0, 100000));
+            monsterdrop.Add(new Item("빛나는 투구", "빛이나는 투구, 가운데에 보석이 박혀있으며 가벼운 느낌이 든다", ItemType.ARMOR, 0, 30, 0, 100000));
+
+            monsterdrop.Add(new Item("흐르는 그늘벼림", "다채로운 빛이 나는 단검, 착용자에게 강한 힘을 부여한다 ", ItemType.WEAPON, 3, 0, 0, 100000));
+            monsterdrop.Add(new Item("흐르는 칼바람", "다채로운 빛이 나는 대검, 가벼운 무게로 착용자에게 강한 힘을 부여한다 ", ItemType.WEAPON, 3, 0, 0, 1000));
+            monsterdrop.Add(new Item("지배자의 갑옷", "다채로운 빛이 나는 갑옷, 가벼운 무게로 착용자에게 강한 힘을 부여한다 ", ItemType.ARMOR, 3, 100, 0, 1000000));
+            monsterdrop.Add(new Item("지배자의 투구", "다채로운 빛이 나는 투구, 가벼운 무게로 착용자에게 강한 힘을 부여한다 ", ItemType.ARMOR, 5, 80, 0, 1000000));
+
+        }
     }
     internal class Monster
     {
@@ -91,4 +115,5 @@ namespace Team_B_11_RPG
 
         }
     }
+
 }
