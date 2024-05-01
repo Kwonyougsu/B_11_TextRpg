@@ -6,7 +6,7 @@ internal class Player
     private int PlayerExp = 0;
     private int MaxExp = 0;
     private int[] requireExp = { 0, 10, 35, 65, 100 };
-
+    public int floor = 1;
     Random random = new Random();
 
     public static List<Item> inventory;
@@ -71,7 +71,7 @@ internal class Player
     {
         int gold = random.Next(100, 500);
         int postion = random.Next(0, 2);
-        int itemdrop = random.Next(0, 10);
+        int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
 
         List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(0, 3);
 
@@ -96,5 +96,44 @@ internal class Player
                 ConsoleUtility.ShowTitle("1");
             }
         }
+    }
+    public void DungeonFloor()
+    {
+        if(floor == 1) // 1층
+        {
+            Console.Clear();
+            ConsoleUtility.ShowTitle("Battle ! ");
+            // 저장되어있는 랜덤몬스터 클리어 
+            RandomMonster.randmonsters.Clear();
+            // 랜덤 몬스터 생성
+            Random randnumber = new Random();
+            // 몬스터 출력
+            for (int i = 0; i < randnumber.Next(1, 5); i++)
+            {
+                int j = randnumber.Next(0, 3);
+                Monster.MakeMonster();
+                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
+                $" || 공격력 : {Monster.monsters[j].Hp} 방어력 : {Monster.monsters[j].Def}");
+                Monster randomMonster = Monster.monsters[j];
+                RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
+            }
+            Console.WriteLine("");
+            Console.WriteLine("[내 정 보]");
+            Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+            Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+        }
+        if (floor == 2) // 2층
+        {
+
+        }
+        if (floor == 3) // 3층
+        {
+
+        }
+        if (floor == 4) // 4층 
+        {
+
+        }
+
     }
 }
