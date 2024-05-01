@@ -11,16 +11,18 @@ namespace Team_B_11_RPG
     public class GameManager
     {
         private Player player;
-        //private List<Item> inventory;
+        private List<Item> inventory;
 
         private List<Item> storeInventory;
 
         private List<QuestList> quests;
         private QuestReward questsReward = new QuestReward();
         private QuestClear questClear = new QuestClear();
-
-        private int questAcceptCheck = 0;
-        private int questClearCheck = 0;
+        
+        public int questAcceptCheck = 0;
+        public int questClearCheck = 0;
+        public int monsterCount = 0;
+        public int monster2Count= 0;
 
         enum PlayerChoice
         {
@@ -48,11 +50,11 @@ namespace Team_B_11_RPG
             }; // 아이템 리스트 단순화
 
             quests = new List<QuestList>();
-            quests.Add(new QuestList("아이템을 장착하자1", "아이템 장착하기", RewardType.GOLD1 , false));
-            quests.Add(new QuestList("아이템을 장착하자2", "아이템 장착하기", RewardType.ITEM2, false));
-            quests.Add(new QuestList("아이템을 장착하자3", "아이템 장착하기", RewardType.ITEM3, false));
-            quests.Add(new QuestList("아이템을 장착하자4", "아이템 장착하기", RewardType.ITEM4, false));
-            quests.Add(new QuestList("아이템을 장착하자5", "아이템 장착하기", RewardType.ITEM5, false));
+            quests.Add(new QuestList("아이템을 장착하자1", "아이템 장착하기", RewardType.GOLD2 , false));
+            quests.Add(new QuestList("아이템을 장착하자2", "아이템 장착하기", RewardType.ITEM1, false));
+            quests.Add(new QuestList("아이템을 장착하자3", "아이템 장착하기", RewardType.ITEM2, false));
+            quests.Add(new QuestList("아이템을 장착하자4", "아이템 장착하기", RewardType.ITEM3, false));
+            quests.Add(new QuestList("아이템을 장착하자5", "아이템 장착하기", RewardType.ITEM4, false));
 
 
 
@@ -758,6 +760,8 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine($"{quests[choice-1].QuestDetail}");
             Console.WriteLine("");
+            questClear.QuestClearRequest(quests[choice - 1].Type);
+            Console.WriteLine("");
             questsReward.QuestRewardType(quests[choice - 1].Type);
             Console.WriteLine("");
             if (quests[choice - 1].IsAccept == false) 
@@ -792,14 +796,26 @@ namespace Team_B_11_RPG
                         }
                         Quest();
                     }
-                    else if (quests[choice - 1].IsAccept == true)
+
+                    else if (quests[choice - 1].IsAccept == true )
                     {
-                        Console.WriteLine("보상을 받으셨습니다.");
-                        questClear.QuestClearReward(quests[choice-1].Type , player , 500);
-                        Thread.Sleep(1000);
-                        quests.RemoveAt(choice - 1);
-                        questAcceptCheck = 0;
-                        questClearCheck = 0;
+                        if (questClearCheck == 1)
+                        {
+                            Console.WriteLine("보상을 받으셨습니다.");
+                            if (quests[choice - 1].Type == RewardType.GOLD1) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 100); }
+                            else if (quests[choice - 1].Type == RewardType.GOLD2) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 200); }
+                            else if (quests[choice - 1].Type == RewardType.GOLD3) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 300); }
+                            else if (quests[choice - 1].Type == RewardType.GOLD4) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 400); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM1) { Player.inventory.Add(new("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM2) { Player.inventory.Add(new Item("무", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM3) { Player.inventory.Add(new Item("쇠", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM4) { Player.inventory.Add(new Item("갑", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM5) { Player.inventory.Add(new Item("옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            Thread.Sleep(1000);
+                            quests.RemoveAt(choice - 1);
+                            questAcceptCheck = 0;
+                            questClearCheck = 0;
+                        }
                         Quest();
                     }
                     Thread.Sleep(1000);

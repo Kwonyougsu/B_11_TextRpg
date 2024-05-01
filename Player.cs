@@ -70,10 +70,7 @@ internal class Player
 
         
     }    
-    public void GetGold(int gold) 
-    {
-        Gold = gold;       
-    }
+    
     public void DungeonResult()
     {
         int gold = random.Next(100, 500);
@@ -97,6 +94,10 @@ internal class Player
             ConsoleUtility.ShowTitle($"{count}");
         }
         
+    }
+    public void GetGold(int gold)
+    {
+        Gold = gold;
     }
 
     public void SetGold(int setGold)
