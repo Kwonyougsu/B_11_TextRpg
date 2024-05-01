@@ -15,6 +15,9 @@ namespace Team_B_11_RPG
 
         private List<Item> storeInventory;
 
+        private List<QuestList> quests;
+        private QuestReward questsReward = new QuestReward();
+
         enum PlayerChoice
         {
             MainMenu,
@@ -37,6 +40,11 @@ namespace Team_B_11_RPG
             storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
             storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
             storeInventory.Add(new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000));
+
+            quests = new List<QuestList>();
+            quests.Add(new QuestList("아이템을 장착하자", "아이템 장착하기", RewardType.ITEM , false));
+            quests.Add(new QuestList("아이템을 장착하자", "아이템 장착하기", RewardType.ITEM, false));
+            quests.Add(new QuestList("아이템을 장착하자", "아이템 장착하기", RewardType.ITEM, false));
 
 
         }
@@ -111,10 +119,10 @@ namespace Team_B_11_RPG
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 전투");
             Console.WriteLine("5. 회복");
-            Console.WriteLine("");
+            Console.WriteLine("6. 퀘스트");
 
             // 2. 선택한 결과를 검증함
-            int choice = ConsoleUtility.PromptMenuChoice(1, 5);
+            int choice = ConsoleUtility.PromptMenuChoice(1, 6);
 
             // 3. 선택한 결과에 따라 보내줌
             switch (choice)
@@ -133,6 +141,9 @@ namespace Team_B_11_RPG
                     break;
                 case 5:
                     Rest();
+                    break;
+                case 6:
+                    Quest();
                     break;
             }
             MainMenu();
@@ -661,6 +672,40 @@ namespace Team_B_11_RPG
                     Console.WriteLine("다시 입력해주세요");
                     break;
             }
+        }
+
+        private void Quest(string? prompt = null)
+        {
+            if (prompt != null)
+            {
+                // 1초간 메시지를 띄운 다음에 다시 진행
+                Console.Clear();
+                ConsoleUtility.ShowTitle(prompt);
+                Thread.Sleep(1000);
+            }
+            Console.Clear();
+            Console.WriteLine("");
+            ConsoleUtility.ShowTitle("퀘스트!");
+            Console.WriteLine("");
+            for(int i = 0; i <3; i++)
+            {
+                Console.WriteLine($"{i+1} . {quests[i].QuestName}");
+            }
+            Console.WriteLine("");
+            int choice = ConsoleUtility.PromptMenuChoice(0, 3);
+
+            Console.Clear();
+            Console.WriteLine("");
+            ConsoleUtility.ShowTitle("퀘스트목록");
+            Console.WriteLine("");
+            Console.WriteLine($"{quests[choice].QuestName}");
+            Console.WriteLine("");
+            Console.WriteLine($"{quests[choice].QuestDetail}");
+            Console.WriteLine("");
+            questsReward.QuestRewardType(quests[choice].Type);
+            Console.WriteLine("");
+            int accept = ConsoleUtility.PromptMenuChoice(0, 3);
+
         }
 
     }

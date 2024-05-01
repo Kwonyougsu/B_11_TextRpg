@@ -22,19 +22,24 @@ internal class QuestList
         isAccept = IsAccept;
     }
 
-    public QuestContents(RewardType type)
+    
+}
+internal class QuestReward
+{
+    public RewardType Type;
+
+
+
+    public void QuestRewardType(RewardType type)
     {
-        Type = type;
-        if(type == RewardType.ITEM) 
+        if (type == RewardType.GOLD)
         {
-            Console.WriteLine("골드");
+            Console.WriteLine("보상 : 골드");
         }
-        
-        if(type == RewardType.GOLD) 
+        else if (type == RewardType.ITEM)
         {
-            Console.WriteLine("아이템");
+            Console.WriteLine("보상 : 아이템");
         }
     }
-
 }
 
