@@ -460,6 +460,9 @@ namespace Team_B_11_RPG
             // 치명타 발생 여부 결정
             bool isCritical = new Random().Next(100) < 15;
 
+            // 회피 발생 여부 결정
+            bool isDodge = new Random().Next(100) < 10;
+
             // 치명타 발생 시 공격력 증가
             if (isCritical)
             {
@@ -478,46 +481,74 @@ namespace Team_B_11_RPG
                         ConsoleUtility.ShowTitle("Battle!!");
                         Console.WriteLine("");
                         Console.WriteLine($"{player.Name}의 공격!");
-                        if(isCritical)
+                        if (isDodge)
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower} - 치명타 공격!!");
+                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
                         }
                         else
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower}");
+                            if (isCritical)
+                            {
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower} - 치명타 공격!!");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}을(를) 공격했습니다. [데미지] : {attackPower}");
+                            }
                         }
                         Console.WriteLine("");
-
-                        RandomMonster selectedMonster = RandomMonster.randmonsters[SelectMonster - 1];
-
-                        int monsterhp = selectedMonster.Hp - (int)attackPower;
-                        if (monsterhp <= 0)
+                        // 회피가 발생하지 않은 경우에만 공격 처리
+                        if (!isDodge)
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
-                            Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Dead");
-                            selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
-                            Console.WriteLine("");
-                            Console.WriteLine("0. 다음");
-                            Console.WriteLine("");
-                            selectedMonster.IsAliveToggle();
-                            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
-
-                            switch (choice)
+                            // 공격 결과 계산 및 출력
+                            RandomMonster selectedMonster = RandomMonster.randmonsters[SelectMonster - 1];
+                            int monsterhp = selectedMonster.Hp - (int)attackPower;
+                            if (monsterhp <= 0)
                             {
-                                case 0:
-                                    EnemyPhase();
-                                    break;
-                                default:
-                                    Console.WriteLine("다시 입력해주세요");
-                                    break;
+                                // 몬스터 사망 처리
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
+                                Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Dead");
+                                selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
+                                Console.WriteLine("");
+                                Console.WriteLine("0. 다음");
+                                Console.WriteLine("");
+                                selectedMonster.IsAliveToggle();
+                                int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+
+                                switch (choice)
+                                {
+                                    case 0:
+                                        EnemyPhase();
+                                        break;
+                                    default:
+                                        Console.WriteLine("다시 입력해주세요");
+                                        break;
+                                }
+                            }
+
+                            else
+                            {
+                                // 몬스터가 살아있는 경우에는 Hp 갱신 후 다음 단계로 진행
+                                Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
+                                Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Hp : {monsterhp}");
+                                selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
+                                Console.WriteLine("");
+                                Console.WriteLine("0. 다음");
+                                int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                                switch (choice)
+                                {
+                                    case 0:
+                                        EnemyPhase();
+                                        break;
+                                    default:
+                                        Console.WriteLine("다시 입력해주세요");
+                                        break;
+                                }
                             }
                         }
                         else
                         {
-                            Console.WriteLine($"{RandomMonster.randmonsters[SelectMonster - 1].Name}");
-                            Console.WriteLine($"Hp : {RandomMonster.randmonsters[SelectMonster - 1].Hp} -> Hp : {monsterhp}");
-                            selectedMonster.Hp = selectedMonster.Hp - (int)attackPower;
-                            Console.WriteLine("");
+                            // 회피가 발생한 경우에는 다음 단계로 진행
                             Console.WriteLine("0. 다음");
                             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
                             switch (choice)
