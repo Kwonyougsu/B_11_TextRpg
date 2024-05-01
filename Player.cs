@@ -41,11 +41,14 @@ internal class Player
         { 
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job}) -> Lv.{Level+1} {Name} ({Job})");
-            Console.WriteLine($"HP :{MaxHp} -> {Current_Hp}");
+            MaxHp = MaxHp + 20;
             Console.WriteLine("레벨업!");
+            Console.WriteLine("체력이 회복되었습니다");
+            Console.WriteLine($"HP :{MaxHp} -> {MaxHp}");
             Level = Level + 1;
             MaxExp = MaxExp - LevelUpExp;
             Exp = MaxExp;
+            Current_Hp = MaxHp;
         }
         else
         {
