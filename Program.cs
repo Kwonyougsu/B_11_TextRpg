@@ -17,6 +17,10 @@ namespace Team_B_11_RPG
 
         private List<QuestList> quests;
         private QuestReward questsReward = new QuestReward();
+        private QuestClear questClear = new QuestClear();
+
+        private int questAcceptCheck = 0;
+        private int questClearCheck = 0;
 
         enum PlayerChoice
         {
@@ -42,9 +46,12 @@ namespace Team_B_11_RPG
             storeInventory.Add(new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000));
 
             quests = new List<QuestList>();
-            quests.Add(new QuestList("아이템을 장착하자", "아이템 장착하기", RewardType.ITEM , false));
-            quests.Add(new QuestList("아이템을 장착하자", "아이템 장착하기", RewardType.ITEM, false));
-            quests.Add(new QuestList("아이템을 장착하자", "아이템 장착하기", RewardType.ITEM, false));
+            quests.Add(new QuestList("아이템을 장착하자1", "아이템 장착하기", RewardType.GOLD1 , false));
+            quests.Add(new QuestList("아이템을 장착하자2", "아이템 장착하기", RewardType.ITEM2, false));
+            quests.Add(new QuestList("아이템을 장착하자3", "아이템 장착하기", RewardType.ITEM3, false));
+            quests.Add(new QuestList("아이템을 장착하자4", "아이템 장착하기", RewardType.ITEM4, false));
+            quests.Add(new QuestList("아이템을 장착하자5", "아이템 장착하기", RewardType.ITEM5, false));
+
 
 
         }
@@ -120,6 +127,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("4. 전투");
             Console.WriteLine("5. 회복");
             Console.WriteLine("6. 퀘스트");
+            Console.WriteLine("");
 
             // 2. 선택한 결과를 검증함
             int choice = ConsoleUtility.PromptMenuChoice(1, 6);
@@ -689,22 +697,69 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             for(int i = 0; i <3; i++)
             {
+                if (i >= quests.Count) { break; }
                 Console.WriteLine($"{i+1} . {quests[i].QuestName}");
             }
             Console.WriteLine("");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 3);
-
+            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine("");
+            int choice = ConsoleUtility.PromptMenuChoice(0, quests.Count);
+            if (choice == 0) MainMenu();
             Console.Clear();
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("퀘스트목록");
             Console.WriteLine("");
-            Console.WriteLine($"{quests[choice].QuestName}");
+            Console.WriteLine($"{quests[choice-1].QuestName}");
             Console.WriteLine("");
-            Console.WriteLine($"{quests[choice].QuestDetail}");
+            Console.WriteLine($"{quests[choice-1].QuestDetail}");
             Console.WriteLine("");
-            questsReward.QuestRewardType(quests[choice].Type);
+            questsReward.QuestRewardType(quests[choice - 1].Type);
             Console.WriteLine("");
-            int accept = ConsoleUtility.PromptMenuChoice(0, 3);
+            if (quests[choice - 1].IsAccept == false) 
+            {
+                Console.WriteLine("0. 돌아가기");
+                Console.WriteLine("1. 수락");
+            }
+            else if (quests[choice -1].IsAccept == true)
+            {
+                Console.WriteLine("0. 돌아가기");
+                Console.WriteLine("1. 보상 받기");
+            }
+            Console.WriteLine("");
+            int accept = ConsoleUtility.PromptMenuChoice(0, 1);
+            switch(accept) 
+            {
+                case 0:
+                    Quest();
+                    break;
+                case 1:
+                    if (quests[choice - 1].IsAccept == false )
+                    {
+                        if (questAcceptCheck == 0)
+                        {
+                            Console.WriteLine("퀘스트 수락 완료!");
+                            quests[choice - 1].IsAccept = true;
+                            questAcceptCheck = 1;
+                        }
+                        else if (questAcceptCheck == 1)
+                        {
+                            Console.WriteLine("퀘스트를 이미 받으신 상태입니다!");
+                        }
+                        Quest();
+                    }
+                    else if (quests[choice - 1].IsAccept == true)
+                    {
+                        Console.WriteLine("보상을 받으셨습니다.");
+                        questClear.QuestClearReward(quests[choice-1].Type , player , 500);
+                        Thread.Sleep(1000);
+                        quests.RemoveAt(choice - 1);
+                        questAcceptCheck = 0;
+                        questClearCheck = 0;
+                        Quest();
+                    }
+                    Thread.Sleep(1000);
+                    break;
+            }
 
         }
 

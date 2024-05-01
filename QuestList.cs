@@ -1,8 +1,14 @@
 ﻿public enum RewardType
 {
-    GOLD,
-    ITEM
-
+    GOLD1,
+    GOLD2,
+    GOLD3,
+    GOLD4,
+    ITEM1,
+    ITEM2,
+    ITEM3,
+    ITEM4,
+    ITEM5,
 }
 internal class QuestList
 {
@@ -28,17 +34,41 @@ internal class QuestReward
 {
     public RewardType Type;
 
+    
 
 
     public void QuestRewardType(RewardType type)
     {
-        if (type == RewardType.GOLD)
+        if (type == RewardType.GOLD1)
         {
             Console.WriteLine("보상 : 골드");
         }
-        else if (type == RewardType.ITEM)
+        else if (type == RewardType.ITEM1)
         {
-            Console.WriteLine("보상 : 아이템");
+            Console.WriteLine("보상 : 가시방패");
+        }
+    }
+}
+
+internal class QuestClear
+{
+    public RewardType Type;
+
+    
+
+
+    public void QuestClearReward(RewardType type , Player player , int giveGold)
+    {
+        int gold = player.Gold;
+        Console.WriteLine(gold);
+        if (type == RewardType.GOLD1)
+        {
+            gold = giveGold + gold;
+            player.SetGold(gold);
+        }
+        else if (type == RewardType.GOLD2)
+        {
+            Console.WriteLine("보상 : 가시방패");
         }
     }
 }

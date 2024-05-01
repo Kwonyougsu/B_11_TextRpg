@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using Team_B_11_RPG;
 
 internal class Player
@@ -52,6 +53,16 @@ internal class Player
             Exp = Exp+ PlayerExp;
         }
         PlayerExp = 0;
+
+        
+    }    
+    public void GetGold(int gold) 
+    {
+        Gold = gold;       
     }
 
+    public void SetGold(int setGold)
+    {
+        Gold = setGold;
+    }
 }
