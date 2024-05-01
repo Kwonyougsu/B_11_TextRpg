@@ -22,6 +22,7 @@ internal class ConsoleUtility
         Console.WriteLine("                           PRESS ANYKEY TO START                             ");
         Console.WriteLine("=============================================================================");
         Console.ReadKey();
+
     }
 
     public static int PromptMenuChoice(int min, int max)
