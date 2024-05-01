@@ -14,6 +14,7 @@ namespace Team_B_11_RPG
         private List<Item> inventory;
 
         private List<Item> storeInventory;
+        private int potionCount = 3;
 
         enum PlayerChoice
         {
@@ -32,11 +33,13 @@ namespace Team_B_11_RPG
             player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100,0);
 
             inventory = new List<Item>();
-            storeInventory = new List<Item>();
-            storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
-            storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
-            storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
-            storeInventory.Add(new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000));
+            storeInventory = new List<Item>
+            {
+                new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500),
+                new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
+                new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000),
+                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000)
+            }; // 아이템 리스트 단순화
 
 
         }
@@ -151,7 +154,7 @@ namespace Team_B_11_RPG
             Console.Clear();
 
             ConsoleUtility.ShowTitle("■ 회복 ■");
-            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.");
+            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다. 남은 포션 : " + potionCount + "개");
             Console.WriteLine("");
             Console.WriteLine("1. 사용하기");
             Console.WriteLine("0. 나가기");
@@ -162,17 +165,23 @@ namespace Team_B_11_RPG
                     MainMenu();
                     break;
                 case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
-                    if (player.Current_Hp <= (player.MaxHp - 31))
+                    if (player.Current_Hp <= (player.MaxHp - 31) && potionCount >= 1)
                     {
                         player.Current_Hp += 30;
+                        potionCount -= 1;
                         Rest("체력이 30 회복되었습니다.");
                     }
-                    else if (player.Current_Hp >= (player.MaxHp -30) && player.Current_Hp <= (player.MaxHp - 1))
+                    else if (player.Current_Hp >= (player.MaxHp -30) && player.Current_Hp <= (player.MaxHp - 1) && potionCount >= 1)
                     {
                         player.Current_Hp = player.MaxHp;
+                        potionCount -= 1;
                         Rest("체력이 모두 찼습니다.");
                     }
-                    else
+                    else if (potionCount == 0)
+                    {
+                        Rest("포션이 부족합니다.");
+                    }
+                    else 
                     {
                         Rest("체력이 이미 가득차있습니다.");
                     }                    
