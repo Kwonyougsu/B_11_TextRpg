@@ -689,6 +689,7 @@ namespace Team_B_11_RPG
                 }
             }
             player.PlayerLevelUp();
+            player.DungeonResult();
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
