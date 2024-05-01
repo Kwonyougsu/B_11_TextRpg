@@ -6,7 +6,11 @@ internal class Player
     private int PlayerExp = 0;
     private int MaxExp = 0;
     private int[] requireExp = {0,10, 35, 65, 100 };
+
     Random random = new Random();
+
+    public static List<Item> inventory;
+
     public string Name { get; set; }
     public string Job { get; }
     public int Level { get; set; }
@@ -67,17 +71,25 @@ internal class Player
     {
         int gold = random.Next(100, 500);
         int postion = random.Next(0, 2);
+        int itemdrop = random.Next(0, 10);
+        int count = 1;
         Console.WriteLine("");
         Console.WriteLine("[획득 아이템]");
         ConsoleUtility.ShowTitle($"{gold} G");
-        Gold = Gold+gold;
-        if(postion != 0)
+        Gold = Gold + gold;
+        if (postion != 0)
         {
             Console.Write("포션 - ");
             ConsoleUtility.ShowTitle($"{postion}");
             Postion = Postion + postion;
         }
-        Console.WriteLine();
+        if (itemdrop < 5)
+        {
+            Console.Write("부식된 검");
+            inventory.Add(new Item("부식된 검", "세월이 흐름에 따라 부식된 검.", ItemType.WEAPON, 2, 0, 0, 1000));
+            ConsoleUtility.ShowTitle($"{count}");
+        }
+        
     }
 
 }

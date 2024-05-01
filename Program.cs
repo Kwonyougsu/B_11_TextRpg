@@ -11,7 +11,7 @@ namespace Team_B_11_RPG
     public class GameManager
     {
         private Player player;
-        private List<Item> inventory;
+        //private List<Item> inventory;
 
         private List<Item> storeInventory;
 
@@ -31,7 +31,7 @@ namespace Team_B_11_RPG
         {
             player = new Player("Chad", "전사", 1, 10, 5, 100, 15000,100,0, 3);
 
-            inventory = new List<Item>();
+            Player.inventory = new List<Item>();
             storeInventory = new List<Item>
             {
                 new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500),
@@ -73,9 +73,9 @@ namespace Team_B_11_RPG
                     break;
             }
 
-            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
-            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
-            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
@@ -201,9 +201,9 @@ namespace Team_B_11_RPG
             Console.WriteLine($"{player.Name} ( {player.Job} )");
 
             // TODO : 능력치 강화분을 표현하도록 변경
-            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
-            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
-            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
@@ -245,9 +245,9 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
 
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < Player.inventory.Count; i++)
             {
-                inventory[i].PrintItemStatDescription();
+                Player.inventory[i].PrintItemStatDescription();
             }
 
             Console.WriteLine("");
@@ -274,14 +274,14 @@ namespace Team_B_11_RPG
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
-            for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < Player.inventory.Count; i++)
             {
-                inventory[i].PrintItemStatDescription(true, i + 1); // 나가기가 0번 고정, 나머지가 1번부터 배정
+                Player.inventory[i].PrintItemStatDescription(true, i + 1); // 나가기가 0번 고정, 나머지가 1번부터 배정
             }
             Console.WriteLine("");
             Console.WriteLine("0. 나가기");
 
-            int KeyInput = ConsoleUtility.PromptMenuChoice(0, inventory.Count);
+            int KeyInput = ConsoleUtility.PromptMenuChoice(0, Player.inventory.Count);
 
             switch (KeyInput)
             {
@@ -289,7 +289,7 @@ namespace Team_B_11_RPG
                     InventoryMenu();
                     break;
                 default:
-                    inventory[KeyInput - 1].ToggleEquipStatus();
+                    Player.inventory[KeyInput - 1].ToggleEquipStatus();
                     EquipMenu();
                     break;
             }
@@ -370,7 +370,7 @@ namespace Team_B_11_RPG
                     {
                         player.Gold -= storeInventory[keyInput - 1].Price;
                         storeInventory[keyInput - 1].Purchase();
-                        inventory.Add(storeInventory[keyInput - 1]);
+                        Player.inventory.Add(storeInventory[keyInput - 1]);
                         PurchaseMenu();
                     }
                     // 3 : 돈이 모자라는 경우
