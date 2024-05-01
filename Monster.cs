@@ -12,7 +12,9 @@ namespace Team_B_11_RPG
     public enum MonsterType
     {
         small = 1,
-        boss = 2
+        buff = 2,
+        epic = 3,
+        boss = 4
     }
     internal class RandomMonster
     {
@@ -84,7 +86,6 @@ namespace Team_B_11_RPG
             monsterdrop.Add(new Item("흐르는 칼바람", "다채로운 빛이 나는 대검, 가벼운 무게로 착용자에게 강한 힘을 부여한다 ", ItemType.WEAPON, 3, 0, 0, 1000));
             monsterdrop.Add(new Item("지배자의 갑옷", "다채로운 빛이 나는 갑옷, 가벼운 무게로 착용자에게 강한 힘을 부여한다 ", ItemType.ARMOR, 3, 100, 0, 1000000));
             monsterdrop.Add(new Item("지배자의 투구", "다채로운 빛이 나는 투구, 가벼운 무게로 착용자에게 강한 힘을 부여한다 ", ItemType.ARMOR, 5, 80, 0, 1000000));
-
         }
     }
     internal class Monster
@@ -107,12 +108,23 @@ namespace Team_B_11_RPG
             Type = type;
             this.IsAlive = true;
         }
-        public static void MakeMonster(bool withNumber = false, int idx = 0)
+        public static void MakeMonster()
         {
             monsters.Add(new Monster("미니언", 2, 5, 0, 15, MonsterType.small, true));
             monsters.Add(new Monster("공허충", 3, 9, 0, 10, MonsterType.small, true));
             monsters.Add(new Monster("대포미니언", 5, 8, 0, 25, MonsterType.small, true));
 
+            monsters.Add(new Monster("붉은 덩쿨정령", 4, 10, 0, 50, MonsterType.buff, true));
+            monsters.Add(new Monster("푸른 골렘", 6, 8, 0, 45, MonsterType.buff, true));
+            monsters.Add(new Monster("브리아레오스", 10, 13, 0, 70, MonsterType.buff, true));
+
+            monsters.Add(new Monster("화염 드래곤", 15, 20, 0, 100, MonsterType.epic, true));
+            monsters.Add(new Monster("화학공학 드래곤", 12, 22, 0, 100, MonsterType.epic, true));
+            monsters.Add(new Monster("마법공학 드래곤", 14, 18, 0, 125, MonsterType.epic, true));
+
+            monsters.Add(new Monster("장로 드래곤", 30, 35, 0, 600, MonsterType.boss, true));
+            monsters.Add(new Monster("바론 남작", 30, 40, 0, 500, MonsterType.boss, true));
+            monsters.Add(new Monster("베히모스", 30, 40, 0, 600, MonsterType.boss, true));
         }
     }
 
