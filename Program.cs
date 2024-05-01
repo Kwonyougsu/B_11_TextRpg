@@ -5,6 +5,8 @@ using System.Dynamic;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Net.NetworkInformation;
+using System.Drawing;
 
 namespace Team_B_11_RPG
 {
@@ -128,7 +130,8 @@ namespace Team_B_11_RPG
             Console.WriteLine("1. 상태보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
-            Console.WriteLine("4. 전투");
+            Console.Write("4. 전투");
+            Console.WriteLine($"  ({player.floor})층");
             Console.WriteLine("5. 회복");
             Console.WriteLine("6. 퀘스트");
             Console.WriteLine("");
@@ -413,33 +416,11 @@ namespace Team_B_11_RPG
                 Thread.Sleep(1000);
             }
 
-            Console.Clear();
-            ConsoleUtility.ShowTitle("Battle ! ");
-            // 저장되어있는 랜덤몬스터 클리어 
-            RandomMonster.randmonsters.Clear();
-            // 랜덤 몬스터 생성
-            Random randnumber = new Random();
-            // 몬스터 출력
-            for (int i = 0; i < randnumber.Next(1, 5); i++)
-            {
-                int j = randnumber.Next(0, 3);
-                Monster.MakeMonster();
-                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Hp} 방어력 : {Monster.monsters[j].Def}");
-                Monster randomMonster = Monster.monsters[j];
-                RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
-            }
-
-            Console.WriteLine("");
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-            Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
-
+            player.DungeonFloor();
             Console.WriteLine("");
             Console.WriteLine("1. 공격");
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("");
-
             int choice = ConsoleUtility.PromptMenuChoice(0, 1);
 
             switch (choice)
@@ -700,6 +681,7 @@ namespace Team_B_11_RPG
         private void EndPhase()
         {
             Console.Clear();
+            RandomMonster.MonsterDropTable();
             ConsoleUtility.ShowTitle("Battle - Result");
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("Victory");
@@ -715,6 +697,7 @@ namespace Team_B_11_RPG
             }
             player.PlayerLevelUp();
             player.DungeonResult();
+            player.floor = player.floor + 1;
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             int choice = ConsoleUtility.PromptMenuChoice(0, 0);
