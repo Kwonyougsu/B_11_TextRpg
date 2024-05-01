@@ -67,7 +67,17 @@ internal class Player
         }
         PlayerExp = 0;
     }
-    public void DungeonResult()
+
+    public void GetGold(int gold)
+    {
+        Gold = gold;
+    }
+
+    public void SetGold(int setGold)
+    {
+        Gold = setGold;
+    }
+public void DungeonResult()
     {
 
         if (floor == 1) 
