@@ -476,6 +476,11 @@ namespace Team_B_11_RPG
             if (isCritical)
             {
                 attackPower *= 1.6;
+                attackPower = (int)Math.Ceiling(attackPower); // 정수로 변환
+            }
+            else
+            {
+                attackPower = (int)Math.Ceiling(attackPower); // 정수로 변환
             }
 
             switch (SelectMonster)
