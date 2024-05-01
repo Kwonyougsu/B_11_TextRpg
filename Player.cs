@@ -57,5 +57,13 @@ internal class Player
         }
         PlayerExp = 0;
     }
+    public void DungeonResult()
+    {
+        Console.WriteLine("");
+        Console.WriteLine("[획득 아이템]");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+    }
 
 }
