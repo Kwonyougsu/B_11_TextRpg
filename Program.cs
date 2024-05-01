@@ -679,6 +679,7 @@ namespace Team_B_11_RPG
         private void EndPhase()
         {
             Console.Clear();
+            RandomMonster.MonsterDropTable();
             ConsoleUtility.ShowTitle("Battle - Result");
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("Victory");
