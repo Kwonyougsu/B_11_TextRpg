@@ -116,9 +116,6 @@ namespace Team_B_11_RPG
                     {
                         int randomIndex = random.Next(0, monsterDropList.Count);
                         Item droppedItem = monsterDropList[randomIndex];
-                        Console.WriteLine(monsterDropList.Count);
-                        Console.WriteLine(randomIndex);
-                        Console.WriteLine(droppedItem.Name);
                         Manager.inventory.Add(droppedItem);
                         Console.Write($"{droppedItem.Name} - ");
                         ConsoleUtility.ShowTitle("1");
