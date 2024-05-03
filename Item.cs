@@ -17,6 +17,7 @@ internal class Item
     public int Atk { get; }
     public int Def { get; }
     public int Hp { get; }
+    public int Mp { get; }
 
     public int Price { get; }
 
