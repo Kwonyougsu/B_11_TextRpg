@@ -40,7 +40,7 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3);
+            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3, 50, 50);
             Player.inventory = new List<Item>();
             storeInventory = new List<Item>
             {
@@ -84,29 +84,33 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3);
+                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3,50,50);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3);
+                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3,50,50);
                     break;
             }
 
             int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
             int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
             int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusMp = Player.inventory.Select(item => item.IsEquipped ? item.Mp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
+                player.MaxMp = (50 + bonusMp) + (player.Level * 20);
                 player.Atk = (10 + bonusAtk) + (player.Level * 0.5);
                 player.Def = (5 + bonusDef) + (player.Level * 2);
             }
             else
             {
                 player.MaxHp = (100 + bonusHp) + (player.Level * 20);
+                player.MaxMp = (50 + bonusMp) + (player.Level *20);
                 player.Atk = (20 + bonusAtk) + (player.Level * 0.5);
                 player.Def = (2 + bonusDef) + (player.Level * 1);
             }
             player.Current_Hp = player.MaxHp;
+            player.Current_Mp = player.MaxMp;
             MainMenu();
         }
 
@@ -241,15 +245,18 @@ namespace Team_B_11_RPG
             int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
             int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
             int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusMp = Player.inventory.Select(item => item.IsEquipped ? item.Mp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
+                player.MaxMp = (50 + bonusMp) + (player.Level * 20);
                 player.Atk = (10 + bonusAtk) + (player.Level * 2);
                 player.Def = (10 + bonusDef) + (player.Level * 3);
             }
             else
             {
                 player.MaxHp = (100 + bonusHp) + (player.Level * 20);
+                player.MaxMp = (50 + bonusMp) + (player.Level * 20);
                 player.Atk = (20 + bonusAtk) + (player.Level * 2);
                 player.Def = (5 + bonusDef) + (player.Level * 3);
             }
@@ -257,6 +264,7 @@ namespace Team_B_11_RPG
             ConsoleUtility.PrintTextHighlights("공격력 : ", player.Atk.ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", player.Def.ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
             ConsoleUtility.PrintTextHighlights("현재 체력 :", player.Current_Hp.ToString()+" / "+player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("현재 MP :", player.Current_Mp.ToString() + " / " + player.MaxMp.ToString(), bonusMp > 0 ? $" (+{bonusMp})" : "");   
 
 
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
@@ -441,8 +449,9 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("1. 공격");
+            Console.WriteLine("2. 스킬");
             Console.WriteLine("");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
+            int choice = ConsoleUtility.PromptMenuChoice(0, 2);
 
             switch (choice)
             {
@@ -451,6 +460,9 @@ namespace Team_B_11_RPG
                     break;
                 case 1:
                     BattleAttack();
+                    break;
+                case 2:
+                    ShowSkills();
                     break;
                 default:
                     Console.WriteLine("다시 입력해주세요");
@@ -479,6 +491,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
             Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
+            Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
             Console.WriteLine("");
             Console.WriteLine("0. 도망가기");
             Console.WriteLine("");
@@ -631,6 +644,151 @@ namespace Team_B_11_RPG
                     EnemyPhase();
                     break;
             }
+        }
+
+        private void ShowSkills()
+        {
+            Console.Clear();
+            ConsoleUtility.ShowTitle("스킬 선택");
+
+            // 스킬 목록 출력
+            Console.WriteLine("[내정보]");
+            Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
+            Console.WriteLine($"H :{player.Current_Hp}/{player.MaxHp} ");
+            Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
+
+
+            Console.WriteLine("");
+            Console.WriteLine("1. 알파 스트라이크 - MP 10");
+            Console.WriteLine("2. 더블 스트라이크 - MP 15");
+            Console.WriteLine("0. 취소");
+            Console.WriteLine("");
+            int skillChoice = ConsoleUtility.PromptMenuChoice(0, 2);
+
+            switch (skillChoice)
+            {
+                case 1:
+                    if (player.Current_Mp >= 10)
+                    {
+                        player.Current_Mp -= 10;
+                        SelectMonsterForSkill(1); // 알파 스트라이크 선택
+                    }
+                    else
+                    {
+                        Console.WriteLine("MP가 부족합니다.");
+                        Thread.Sleep(2000);
+                        ShowSkills();
+                    }
+                    break;
+                case 2:
+                    if (player.Current_Mp >= 15)
+                    {
+                        player.Current_Mp -= 15;
+                        SelectMonsterForSkill(2); // 더블 스트라이크 선택
+                    }
+                    else
+                    {
+                        Console.WriteLine("MP가 부족합니다.");
+                        Thread.Sleep(2000);
+                        ShowSkills();
+                    }
+                    break;
+                case 0:
+                    Battle();
+                    break;
+            }
+        }
+        private void SelectMonsterForSkill(int skillChoice)
+        {
+            Console.WriteLine("스킬을 사용할 몬스터를 선택하세요: ");
+            Console.WriteLine(" ");
+
+            for(int i =0; i<RandomMonster.randmonsters.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {RandomMonster.randmonsters[i].Name} - HP: {RandomMonster.randmonsters[i].Hp}");
+            }
+
+            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine(" ");
+
+            int monsterChoice = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count);
+
+            if(monsterChoice == 0)
+            {
+                Battle(); // 돌아가기 선택 시 전투 메뉴로 돌아감
+            }
+            else
+            {
+                // 선택한 몬스터에 스킬 적용
+                ApplySkillToMonster(monsterChoice, skillChoice);
+            }
+        }
+
+        private void ApplySkillToMonster(int monsterIndex, int skillChoice)
+        {
+            // 선택한 몬스터에 스킬을 적용하고 결과 출력
+            double attackPower = 0;
+
+            if(skillChoice == 1)
+            {
+                attackPower = player.Atk * 2; // 알파 스트라이크의 공격력은 플레이어의 공격력의 두 배
+                Console.WriteLine($"{player.Name}의 알파 스트라이크!");
+            }
+            else if (skillChoice == 2)
+            {
+                attackPower = player.Atk * 1.5; // 더블 스트라이크의 공격력은 플레이어의 공격력의 1.5배
+                Console.WriteLine($"{player.Name}의 더블 스트라이크!");
+            }
+
+            // 선택한 몬스터에게 공격력 적용
+            RandomMonster selectedMonster = RandomMonster.randmonsters[monsterIndex - 1];
+            int monsterhp = selectedMonster.Hp - (int)attackPower;
+
+            // 공격 결과 출력
+            if (monsterhp <=0)
+            {
+                // 몬스터 사망 처리
+                Console.WriteLine($"{selectedMonster.Name}을(를) 처치했습니다!");
+                Console.WriteLine($"HP : {selectedMonster.Hp} -> Dead");
+                selectedMonster.Hp = 0;
+                selectedMonster.IsAliveToggle();
+
+                Console.WriteLine(" ");
+                Console.WriteLine("0. 다음");
+                Console.WriteLine(" ");
+                int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+
+                switch (choice)
+                {
+                    case 0:
+                        EnemyPhase();
+                        break;
+                    default:
+                        Console.WriteLine("다시 입력해주세요");
+                        break;
+                }
+            }
+            else
+            {
+                // 몬스터가 살아있는 경우에만 Hp 갱신 후 다음 단계로 진행
+                Console.WriteLine($"{selectedMonster.Name}");
+                Console.WriteLine($"HP : {selectedMonster.Hp} -> HP : {monsterhp}");
+                selectedMonster.Hp = monsterhp;
+                Console.WriteLine(" ");
+                Console.WriteLine("0. 다음");
+                int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                switch (choice)
+                {
+                    case 0:
+                        Battle();
+                        break;
+                    default:
+                        Console.WriteLine("다시 입력해주세요.");
+                        break;
+                }
+            }
+
+            Thread.Sleep(2000);
         }
 
         private void EnemyPhase(string? prompt = null)

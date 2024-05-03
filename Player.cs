@@ -22,7 +22,10 @@ internal class Player
     public int Current_Hp { get; set; }
     public int Exp { get; set; }
     public int Postion { get; set; }
-    public Player(string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp, int postion)
+    public int MaxMp { get; set; }
+    public int Current_Mp { get; set; }
+
+    public Player(string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp, int postion, int maxmp, int current_mp)
     {
         Name = name;
         Job = job;
@@ -34,6 +37,8 @@ internal class Player
         Current_Hp = current_hp;
         Exp = exp;
         Postion = postion;
+        MaxMp = maxmp;
+        Current_Mp =current_mp;
     }
 
     public void Save(string filePath)
@@ -61,19 +66,24 @@ internal class Player
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job}) -> Lv.{Level + 1} {Name} ({Job})");
             MaxHp = MaxHp + 20;
+            MaxMp = MaxMp + 20;
             Console.WriteLine("레벨업!");
             Console.WriteLine("체력이 회복되었습니다");
             Console.WriteLine($"HP :{MaxHp} -> {MaxHp}");
+            Console.WriteLine($"마나가 회복되었습니다");
+            Console.WriteLine($"MP :{MaxMp} -> {MaxMp}");
             Level = Level + 1;
             MaxExp = MaxExp - LevelUpExp;
             Exp = MaxExp;
             Current_Hp = MaxHp;
+            Current_Mp=MaxMp;
         }
         else
         {
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{MaxHp} -> {Current_Hp}");
+            Console.WriteLine($"MP :{MaxMp} -> {Current_Mp}");
             Console.WriteLine($"Exp :{Exp} -> {MaxExp}");
             Exp = Exp + PlayerExp;
         }
@@ -234,6 +244,7 @@ internal class Player
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
         }// 1층
         if (floor == 2) 
         {
@@ -257,6 +268,7 @@ internal class Player
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
         }// 2층
         if (floor == 3) 
@@ -281,6 +293,7 @@ internal class Player
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
         }// 3층
         if (floor == 4) 
@@ -305,6 +318,7 @@ internal class Player
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
         }// 4층 (보스)
 
