@@ -788,7 +788,7 @@ namespace Team_B_11_RPG
                 switch (choice)
                 {
                     case 0:
-                        Battle();
+                        BattleAttack();
                         break;
                     default:
                         Console.WriteLine("다시 입력해주세요.");
