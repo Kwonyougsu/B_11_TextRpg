@@ -266,10 +266,9 @@ namespace Team_B_11_RPG
 
             ConsoleUtility.PrintTextHighlights("공격력 : ", player.Atk.ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", player.Def.ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("현재 체력 :", player.Current_Hp.ToString()+" / "+player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
-            ConsoleUtility.PrintTextHighlights("현재 MP :", player.Current_Mp.ToString() + " / " + player.MaxMp.ToString(), bonusMp > 0 ? $" (+{bonusMp})" : "");   
-
-
+            ConsoleUtility.PrintTextHighlights("현재 HP :", player.Current_Hp.ToString()+" / "+player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("현재 MP :", player.Current_Mp.ToString() + " / " + player.MaxMp.ToString(), bonusMp > 0 ? $" (+{bonusMp})" : "");
+            ConsoleUtility.PrintTextHighlights("경험치 :", player.Exp.ToString());
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
             Console.WriteLine("");
 
@@ -665,7 +664,6 @@ namespace Team_B_11_RPG
             Console.WriteLine($"H :{player.Current_Hp}/{player.MaxHp} ");
             Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
 
-
             Console.WriteLine("");
             Console.WriteLine("1. 알파 스트라이크 - MP 10");
             Console.WriteLine("2. 더블 스트라이크 - MP 15");
@@ -706,6 +704,7 @@ namespace Team_B_11_RPG
                     break;
             }
         }
+
         private void SelectMonsterForSkill(int skillChoice)
         {
             Console.WriteLine("스킬을 사용할 몬스터를 선택하세요: ");
@@ -1077,6 +1076,7 @@ namespace Team_B_11_RPG
             Thread.Sleep(2000);
             MainMenu();
         }
+
         public void ReName()
         {
             Console.Clear();
@@ -1086,6 +1086,7 @@ namespace Team_B_11_RPG
             Thread.Sleep(2000);
             MainMenu();
         }
+
     }
 
         public class Program
