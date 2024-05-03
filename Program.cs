@@ -44,10 +44,10 @@ namespace Team_B_11_RPG
             Player.inventory = new List<Item>();
             storeInventory = new List<Item>
             {
-                new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500),
+                new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 3, 0, 500),
                 new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
-                new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000),
-                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000)
+                new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 5, 0, 2000),
+                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000)
             }; // 아이템 리스트 단순화
 
 
@@ -98,13 +98,13 @@ namespace Team_B_11_RPG
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
                 player.Atk = (10 + bonusAtk) + (player.Level * 0.5);
-                player.Def = (10 + bonusDef) + (player.Level * 1);
+                player.Def = (5 + bonusDef) + (player.Level * 2);
             }
             else
             {
                 player.MaxHp = (100 + bonusHp) + (player.Level * 20);
                 player.Atk = (20 + bonusAtk) + (player.Level * 0.5);
-                player.Def = (5 + bonusDef) + (player.Level * 1);
+                player.Def = (2 + bonusDef) + (player.Level * 1);
             }
             player.Current_Hp = player.MaxHp;
             MainMenu();
@@ -634,20 +634,28 @@ namespace Team_B_11_RPG
               Random randatk = new Random();
               double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
               MattackPower = Math.Ceiling(MattackPower);
-              
-              if (RandomMonster.randmonsters[i].IsAlive)
-              {
-                  Console.Clear();
-                  ConsoleUtility.ShowTitle("Battle!!");
-                  Console.WriteLine("");
-                  Console.WriteLine($"{RandomMonster.randmonsters[i].Name}의 공격!");
-                  Console.WriteLine($"{player.Name}을(를) 공격했습니다. [데미지] : {RandomMonster.randmonsters[i].Atk}");
-                  Console.WriteLine("");
-                  Console.WriteLine("[내 정 보]");
-                  Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
-                  player.Current_Hp = Math.Max(player.Current_Hp - (int)MattackPower,0);
-                  Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
-                  Console.WriteLine("");
+
+                if (RandomMonster.randmonsters[i].IsAlive)
+                {
+                    Console.Clear();
+                    ConsoleUtility.ShowTitle("Battle!!");
+                    Console.WriteLine("");
+                    Console.WriteLine($"{RandomMonster.randmonsters[i].Name}의 공격!");
+                    Console.WriteLine($"{player.Name}을(를) 공격했습니다. [데미지] : {RandomMonster.randmonsters[i].Atk}"+ $" , {(player.Def * 0.5)} 만큼 방어!");
+                    Console.WriteLine($"[최종 데미지] : {RandomMonster.randmonsters[i].Atk - (player.Def * 0.5)}");
+                    if ((int)MattackPower - (player.Def * 0.5) <= 0)
+                    {
+                        Console.WriteLine("공격을 완벽하게 방어했습니다!");
+                    }
+                    else
+                    {
+                        player.Current_Hp = Math.Max(player.Current_Hp - ((int)MattackPower - (player.Def / 2)), 0);
+                    }
+                    Console.WriteLine("");
+                    Console.WriteLine("[내 정 보]");
+                    Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.Job})");
+                    Console.WriteLine($"HP :{player.Current_Hp}/{player.MaxHp}");
+                    Console.WriteLine("");
                     if (player.Current_Hp <= 0)
                     {
                         losePhase();
