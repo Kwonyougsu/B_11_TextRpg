@@ -820,7 +820,7 @@ namespace Team_B_11_RPG
                         }
                         else if (questAcceptCheck == 1)
                         {
-                            Console.WriteLine("퀘스트를 이미 받으신 상태입니다!");\
+                            Console.WriteLine("퀘스트를 이미 받으신 상태입니다!");
                             Thread.Sleep(1000);
                         }
                         Quest();
