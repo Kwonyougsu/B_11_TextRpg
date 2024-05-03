@@ -1,85 +1,77 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Numerics;
 using Team_B_11_RPG;
 
-internal class Player
+namespace Team_B_11_RPG
 {
-    private int PlayerExp = 0;
-    private int MaxExp = 0;
-    private int[] requireExp = { 0, 10, 35, 65, 100 };
-    public int floor = 1;
-    Random random = new Random();
-
-    public static List<Item> inventory { get; set; }
-
-    public string Name { get; set; }
-    public string Job { get; }
-    public int Level { get; set; }
-    public double Atk { get; set; }
-    public int Def { get; set; }
-    public int MaxHp { get; set; }
-    public int Gold { get; set; }
-    public int Current_Hp { get; set; }
-    public int Exp { get; set; }
-    public int Postion { get; set; }
-    public int MaxMp { get; set; }
-    public int Current_Mp { get; set; }
-
-    public Player(string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp, int postion, int maxmp, int current_mp)
+    internal class Player
     {
-        Name = name;
-        Job = job;
-        Level = level;
-        Atk = atk;
-        Def = def;
-        MaxHp = maxhp;
-        Gold = gold;
-        Current_Hp = current_hp;
-        Exp = exp;
-        Postion = postion;
-        MaxMp = maxmp;
-        Current_Mp =current_mp;
-    }
+        GameManager Manager;
 
-    public void Save(string filePath)
-    {
-        string json = JsonConvert.SerializeObject(this);
-        File.WriteAllText(filePath, json);
-    }
+        private int PlayerExp = 0;
+        private int MaxExp = 0;
+        private int[] requireExp = { 0, 10, 35, 65, 100 };
+        public int floor = 1;
+        Random random = new Random();
 
-    public static Player Load(string filePath)
-    {
-        string json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<Player>(json);
-    }
+        public string Name { get; set; }
+        public string Job { get; }
+        public int Level { get; set; }
+        public double Atk { get; set; }
+        public int Def { get; set; }
+        public int MaxHp { get; set; }
+        public int Gold { get; set; }
+        public int Current_Hp { get; set; }
+        public int Exp { get; set; }
+        public int Postion { get; set; }
+        public int MaxMp { get; set; }
+        public int Current_Mp { get; set; }
+        public Player(GameManager manager,string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp, int postion,int maxmp,int current_mp)
+        {
+            Manager = manager;
+            Name = name;
+            Job = job;
+            Level = level;
+            Atk = atk;
+            Def = def;
+            MaxHp = maxhp;
+            Gold = gold;
+            Current_Hp = current_hp;
+            Exp = exp;
+            Postion = postion;
+            MaxMp = maxmp;
+            Current_Mp = current_mp;
+        }
+
     public void GetExp(int monsterexp)
     {
         PlayerExp += monsterexp;
     }
-    public void PlayerLevelUp()
-    {
-        int LevelUpExp = requireExp[Level];
-        //MaxExp를 만들어서 넣고 초기화? 하는 방향성으로 ㄱㄱ 
-        MaxExp = Exp + PlayerExp;
-        if (MaxExp >= LevelUpExp)
+        public void PlayerLevelUp()
         {
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{Level} {Name} ({Job}) -> Lv.{Level + 1} {Name} ({Job})");
-            MaxHp = MaxHp + 20;
-            MaxMp = MaxMp + 20;
-            Console.WriteLine("레벨업!");
-            Console.WriteLine("체력이 회복되었습니다");
-            Console.WriteLine($"HP :{MaxHp} -> {MaxHp}");
-            Console.WriteLine($"마나가 회복되었습니다");
-            Console.WriteLine($"MP :{MaxMp} -> {MaxMp}");
-            Level = Level + 1;
-            MaxExp = MaxExp - LevelUpExp;
-            Exp = MaxExp;
-            Current_Hp = MaxHp;
-            Current_Mp=MaxMp;
-        }
-        else
-        {
+            int LevelUpExp = requireExp[Level];
+            //MaxExp를 만들어서 넣고 초기화? 하는 방향성으로 ㄱㄱ 
+            MaxExp = Exp + PlayerExp;
+            if (MaxExp >= LevelUpExp)
+            {
+                Console.WriteLine("[내 정 보]");
+                Console.WriteLine($"Lv.{Level} {Name} ({Job}) -> Lv.{Level + 1} {Name} ({Job})");
+                MaxHp = MaxHp + 20;
+                MaxMp = MaxMp + 20;
+                Console.WriteLine("레벨업!");
+                Console.WriteLine("체력이 회복되었습니다");
+                Console.WriteLine($"HP :{MaxHp} -> {MaxHp}");
+                Console.WriteLine($"마나가 회복되었습니다");
+                Console.WriteLine($"MP :{MaxMp} -> {MaxMp}");
+                Level = Level + 1;
+                MaxExp = MaxExp - LevelUpExp;
+                Exp = MaxExp;
+                Current_Hp = MaxHp;
+                Current_Mp = MaxMp;
+            }
+            else
+            {
             Console.WriteLine("[내 정 보]");
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{MaxHp} -> {Current_Hp}");
@@ -92,110 +84,118 @@ internal class Player
 
 
 
-    public void SetGold(int setGold)
-    {
-        Gold = setGold;
-    }
-    public void DungeonResult()
-    {
-
-        if (floor == 1) 
+        public void SetGold(int setGold)
         {
-            int gold = random.Next(100, 500);
-            int postion = random.Next(0, 2);
-            int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
+            Gold = setGold;
+        }
+        public void DungeonResult()
+        {
 
-            List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(0, 3);
+            if (floor == 1)
+            {
+                int gold = random.Next(100, 500);
+                int postion = random.Next(0, 2);
+                int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
 
-            Console.WriteLine("");
-            Console.WriteLine("[획득 아이템]");
-            ConsoleUtility.ShowTitle($"{gold} G");
-            Gold = Gold + gold;
-            if (postion != 0)
-            {
-                Console.Write("포션 - ");
-                ConsoleUtility.ShowTitle($"{postion}");
-                Postion = Postion + postion;
-            }
-            if (itemdrop < 5)
-            {
-                if (monsterDropList.Count > 0)
+                List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(0, 3);
+                
+                Console.WriteLine("");
+                Console.WriteLine("[획득 아이템]");
+                ConsoleUtility.ShowTitle($"{gold} G");
+                Gold = Gold + gold;
+
+                if (postion != 0)
                 {
-                    int randomIndex = random.Next(0, monsterDropList.Count);
-                    Item droppedItem = monsterDropList[randomIndex];
-                    inventory.Add(droppedItem);
-                    Console.Write($"{droppedItem.Name} - ");
-                    ConsoleUtility.ShowTitle("1");
+                    Console.Write("포션 - ");
+                    ConsoleUtility.ShowTitle($"{postion}");
+                    Postion = Postion + postion;
                 }
-            }
-        }// 1층
-        if (floor == 2) 
-        {
-            int gold = random.Next(500, 700);
-            int postion = random.Next(0, 2);
-            int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
-
-            List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(4, 7);
-
-            Console.WriteLine("");
-            Console.WriteLine("[획득 아이템]");
-            ConsoleUtility.ShowTitle($"{gold} G");
-            Gold = Gold + gold;
-            if (postion != 0)
-            {
-                Console.Write("포션 - ");
-                ConsoleUtility.ShowTitle($"{postion}");
-                Postion = Postion + postion;
-            }
-            if (itemdrop < 5)
-            {
-                if (monsterDropList.Count > 0)
+                if (itemdrop > 0)
                 {
-                    int randomIndex = random.Next(0, monsterDropList.Count);
-                    Item droppedItem = monsterDropList[randomIndex];
-                    inventory.Add(droppedItem);
-                    Console.Write($"{droppedItem.Name} - ");
-                    ConsoleUtility.ShowTitle("1");
+                    if (monsterDropList.Count > 0)
+                    {
+                        int randomIndex = random.Next(0, monsterDropList.Count);
+                        Item droppedItem = monsterDropList[randomIndex];
+                        Console.WriteLine(monsterDropList.Count);
+                        Console.WriteLine(randomIndex);
+                        Console.WriteLine(droppedItem.Name);
+
+                        Manager.inventory.Add(droppedItem);
+                        Console.Write($"{droppedItem.Name} - ");
+                        ConsoleUtility.ShowTitle("1");
+                    }
                 }
-            }
-        }// 2층
-        if (floor == 3) 
-        {
-            int gold = random.Next(500, 700);
-            int postion = random.Next(0, 2);
-            int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
-
-            List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(8, 11);
-
-            Console.WriteLine("");
-            Console.WriteLine("[획득 아이템]");
-            ConsoleUtility.ShowTitle($"{gold} G");
-            Gold = Gold + gold;
-            if (postion != 0)
+            }// 1층
+            if (floor == 2)
             {
-                Console.Write("포션 - ");
-                ConsoleUtility.ShowTitle($"{postion}");
-                Postion = Postion + postion;
-            }
-            if (itemdrop < 5)
-            {
-                if (monsterDropList.Count > 0)
+                int gold = random.Next(500, 700);
+                int postion = random.Next(0, 2);
+                int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
+
+                List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(4, 7);
+
+                Console.WriteLine("");
+                Console.WriteLine("[획득 아이템]");
+                ConsoleUtility.ShowTitle($"{gold} G");
+                Gold = Gold + gold;
+                if (postion != 0)
                 {
-                    int randomIndex = random.Next(0, monsterDropList.Count);
-                    Item droppedItem = monsterDropList[randomIndex];
-                    inventory.Add(droppedItem);
-                    Console.Write($"{droppedItem.Name} - ");
-                    ConsoleUtility.ShowTitle("1");
+                    Console.Write("포션 - ");
+                    ConsoleUtility.ShowTitle($"{postion}");
+                    Postion = Postion + postion;
                 }
-            }
-        }// 3층
-        if (floor == 4) 
-        {
-            int gold = random.Next(500, 700);
-            int postion = random.Next(0, 2);
-            int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
+                if (itemdrop < 5)
+                {
+                    if (monsterDropList.Count > 0)
+                    {
+                        int randomIndex = random.Next(0, monsterDropList.Count);
+                        Item droppedItem = monsterDropList[randomIndex];
+                        Console.WriteLine(monsterDropList.Count);
+                        Console.WriteLine(randomIndex);
+                        Console.WriteLine(droppedItem.Name);
+                        Manager.inventory.Add(droppedItem);
+                        Console.Write($"{droppedItem.Name} - ");
+                        ConsoleUtility.ShowTitle("1");
+                    }
+                }
+            }// 2층
+            if (floor == 3)
+            {
+                int gold = random.Next(500, 700);
+                int postion = random.Next(0, 2);
+                int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
 
-            List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(12, 15);
+                List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(8, 11);
+
+                Console.WriteLine("");
+                Console.WriteLine("[획득 아이템]");
+                ConsoleUtility.ShowTitle($"{gold} G");
+                Gold = Gold + gold;
+                if (postion != 0)
+                {
+                    Console.Write("포션 - ");
+                    ConsoleUtility.ShowTitle($"{postion}");
+                    Postion = Postion + postion;
+                }
+                if (itemdrop < 5)
+                {
+                    if (monsterDropList.Count > 0)
+                    {
+                        int randomIndex = random.Next(0, monsterDropList.Count);
+                        Item droppedItem = monsterDropList[randomIndex];
+                        Manager.inventory.Add(droppedItem);
+                        Console.Write($"{droppedItem.Name} - ");
+                        ConsoleUtility.ShowTitle("1");
+                    }
+                }
+            }// 3층
+            if (floor == 4)
+            {
+                int gold = random.Next(500, 700);
+                int postion = random.Next(0, 2);
+                int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
+
+                List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(12, 15);
 
             Console.WriteLine("");
             Console.WriteLine("[획득 아이템]");
@@ -213,7 +213,7 @@ internal class Player
                 {
                     int randomIndex = random.Next(0, monsterDropList.Count);
                     Item droppedItem = monsterDropList[randomIndex];
-                    inventory.Add(droppedItem);
+                    Manager.inventory.Add(droppedItem);
                     Console.Write($"{droppedItem.Name} - ");
                     ConsoleUtility.ShowTitle("1");
                 }
@@ -245,7 +245,7 @@ internal class Player
             Console.WriteLine($"Lv.{Level} {Name} ({Job})");
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
             Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
-        }// 1층
+            }// 1층
         if (floor == 2) 
         {
             Console.Clear();
@@ -270,7 +270,7 @@ internal class Player
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
             Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
-        }// 2층
+            }// 2층
         if (floor == 3) 
         {
             Console.Clear();
@@ -295,7 +295,7 @@ internal class Player
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
             Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
-        }// 3층
+            }// 3층
         if (floor == 4) 
         {
             Console.Clear();
@@ -320,7 +320,8 @@ internal class Player
             Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
             Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
-        }// 4층 (보스)
+            }// 4층 (보스)
 
+        }
     }
 }

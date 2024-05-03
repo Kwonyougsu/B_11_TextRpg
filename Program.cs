@@ -8,14 +8,16 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Drawing;
 using static QuestClear;
+using System.Collections.Generic;
 
 namespace Team_B_11_RPG
 {
-    public class GameManager
+    internal class GameManager
     {
         private Player player;
-        private List<Item> inventory;
+        private Item item;
 
+        public List<Item> inventory = new List<Item>();
         private List<Item> storeInventory;
 
         private List<QuestList> quests = new List<QuestList>(QuestListOrder.questOrder);
@@ -40,8 +42,7 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3, 50, 50);
-            Player.inventory = new List<Item>();
+            player = new Player(this,"Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3);
             storeInventory = new List<Item>
             {
                 new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 3, 0, 500),
@@ -59,7 +60,8 @@ namespace Team_B_11_RPG
             ConsoleUtility.PrintGameHeader();
             if (File.Exists("playerfile.json"))
             {
-                player = Player.Load("playerfile.json");
+                player = DataMamager<Player>.Load("playerfile.json");
+                inventory = DataMamager<List<Item>>.Load("itemfile.json");
                 MainMenu();
             }
             else
@@ -84,17 +86,16 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3,50,50);
+                    player = new Player(this,player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3);
                     break;
                 case 2:
-                    player = new Player(player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3,50,50);
+                    player = new Player(this,player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3);
                     break;
             }
 
-            int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
-            int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
-            int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
-            int bonusMp = Player.inventory.Select(item => item.IsEquipped ? item.Mp : 0).Sum();
+            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
@@ -242,10 +243,10 @@ namespace Team_B_11_RPG
             Console.WriteLine($"{player.Name} ( {player.Job} )");
 
             // TODO : 능력치 강화분을 표현하도록 변경
-            int bonusAtk = Player.inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
-            int bonusDef = Player.inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
-            int bonusHp = Player.inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
-            int bonusMp = Player.inventory.Select(item => item.IsEquipped ? item.Mp : 0).Sum();
+            int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
+            int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
+            int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusMp = inventory.Select(item => item.IsEquipped ? item.Mp : 0).Sum();
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
@@ -290,9 +291,9 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
 
-            for (int i = 0; i < Player.inventory.Count; i++)
+            for (int i = 0; i < inventory.Count; i++)
             {
-                Player.inventory[i].PrintItemStatDescription();
+                inventory[i].PrintItemStatDescription();
             }
 
             Console.WriteLine("");
@@ -319,14 +320,14 @@ namespace Team_B_11_RPG
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine("");
             Console.WriteLine("[아이템 목록]");
-            for (int i = 0; i < Player.inventory.Count; i++)
+            for (int i = 0; i < inventory.Count; i++)
             {
-                Player.inventory[i].PrintItemStatDescription(true, i + 1); // 나가기가 0번 고정, 나머지가 1번부터 배정
+                inventory[i].PrintItemStatDescription(true, i + 1); // 나가기가 0번 고정, 나머지가 1번부터 배정
             }
             Console.WriteLine("");
             Console.WriteLine("0. 나가기");
 
-            int KeyInput = ConsoleUtility.PromptMenuChoice(0, Player.inventory.Count);
+            int KeyInput = ConsoleUtility.PromptMenuChoice(0, inventory.Count);
 
             switch (KeyInput)
             {
@@ -334,12 +335,11 @@ namespace Team_B_11_RPG
                     InventoryMenu();
                     break;
                 default:
-                    Player.inventory[KeyInput - 1].ToggleEquipStatus();
-                    if (Player.inventory[KeyInput - 1] != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
+                    inventory[KeyInput - 1].ToggleEquipStatus();
+                    if (inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
                         questClear.QuestClearCheck = 1;
                     }
-                    
                     EquipMenu();
                     break;
             }
@@ -420,7 +420,7 @@ namespace Team_B_11_RPG
                     {
                         player.Gold -= storeInventory[keyInput - 1].Price;
                         storeInventory[keyInput - 1].Purchase();
-                        Player.inventory.Add(storeInventory[keyInput - 1]);
+                        inventory.Add(storeInventory[keyInput - 1]);
                         PurchaseMenu();
                     }
                     // 3 : 돈이 모자라는 경우
@@ -1045,11 +1045,11 @@ namespace Team_B_11_RPG
                             else if (quests[choice - 1].Type == RewardType.GOLD2) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 2000); }
                             else if (quests[choice - 1].Type == RewardType.GOLD3) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 3000); }
                             else if (quests[choice - 1].Type == RewardType.GOLD4) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 4000); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM1) { Player.inventory.Add(new Item("파수꾼의 갑옷", "견고 합니다", ItemType.ARMOR, 0, 20, 0, 5000)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM2) { Player.inventory.Add(new Item("톱날 단검", "날이 톱으로 되어있는 단검입니다", ItemType.WEAPON, 15, 0, 0, 5000)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM3) { Player.inventory.Add(new Item("암흑의 인장", "적을 처치하고 자신의 영광을 증명하세요", ItemType.ARMOR, 20, 20, 50, 50000)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM4) { Player.inventory.Add(new Item("망자의 갑옷", "이갑옷은 당신이 어떤 전장을 해쳐왔는지 증명합니다", ItemType.ARMOR, 0, 80, 100, 500000)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM5) { Player.inventory.Add(new Item("무한의 대검", "당신을 막을수는없다는걸 말대신 이칼로 증명합니다", ItemType.WEAPON, 80, 0, 0, 500000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM1) { inventory.Add(new Item("파수꾼의 갑옷", "견고 합니다", ItemType.ARMOR, 0, 20, 0, 5000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM2) { inventory.Add(new Item("톱날 단검", "날이 톱으로 되어있는 단검입니다", ItemType.WEAPON, 15, 0, 0, 5000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM3) { inventory.Add(new Item("암흑의 인장", "적을 처치하고 자신의 영광을 증명하세요", ItemType.ARMOR, 20, 20, 50, 50000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM4) { inventory.Add(new Item("망자의 갑옷", "이갑옷은 당신이 어떤 전장을 해쳐왔는지 증명합니다", ItemType.ARMOR, 0, 80, 100, 500000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM5) { inventory.Add(new Item("무한의 대검", "당신을 막을수는없다는걸 말대신 이칼로 증명합니다", ItemType.WEAPON, 80, 0, 0, 500000)); }
                             Thread.Sleep(1000);
                             quests.RemoveAt(choice - 1);
                             monsterCount = 0;
@@ -1069,11 +1069,11 @@ namespace Team_B_11_RPG
         public void SavePlayerData()
         {
             Console.Clear();
-            player.Save("playerfile.json");
+            DataMamager<Player>.Save(player,"playerfile.json");
+            DataMamager<List<Item>>.Save(inventory,"itemfile.json");
             Console.WriteLine("플레이어 정보가 저장되었습니다.");
             Thread.Sleep(2000);
             MainMenu();
-
         }
         public void ReName()
         {
