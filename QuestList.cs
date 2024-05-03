@@ -88,8 +88,7 @@ internal class QuestReward
 
 internal class QuestClear
 {
-    public RewardType Type;
-    GameManager gameManager;
+
     public int Count;
     public int QuestClearCheck;
     public void QuestCount(int count, ref int questClearCheck)
