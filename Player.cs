@@ -110,7 +110,7 @@ namespace Team_B_11_RPG
                     ConsoleUtility.ShowTitle($"{postion}");
                     Postion = Postion + postion;
                 }
-                if (itemdrop > 0)
+                if (itemdrop < 5)
                 {
                     if (monsterDropList.Count > 0)
                     {
@@ -119,7 +119,6 @@ namespace Team_B_11_RPG
                         Console.WriteLine(monsterDropList.Count);
                         Console.WriteLine(randomIndex);
                         Console.WriteLine(droppedItem.Name);
-
                         Manager.inventory.Add(droppedItem);
                         Console.Write($"{droppedItem.Name} - ");
                         ConsoleUtility.ShowTitle("1");

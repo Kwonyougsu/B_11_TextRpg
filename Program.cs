@@ -42,7 +42,7 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player(this,"Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3);
+            player = new Player(this,"Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3,50,50);
             storeInventory = new List<Item>
             {
                 new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 3, 0, 500),
@@ -86,16 +86,18 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(this,player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3);
+                    player = new Player(this,player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3,50,50);
                     break;
                 case 2:
-                    player = new Player(this,player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3);
+                    player = new Player(this,player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3,50,50);
                     break;
             }
 
             int bonusAtk = inventory.Select(item => item.IsEquipped ? item.Atk : 0).Sum();
             int bonusDef = inventory.Select(item => item.IsEquipped ? item.Def : 0).Sum();
             int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+            int bonusMp = inventory.Select(item => item.IsEquipped ? item.Mp : 0).Sum();
+
             if (player.Job == "탱커")
             {
                 player.MaxHp = (150 + bonusHp) + (player.Level * 20);
