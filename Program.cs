@@ -193,6 +193,14 @@ namespace Team_B_11_RPG
                     MainMenu();
                     break;
                 case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (i >= quests.Count) break;
+                        if (questAcceptCheck == 1 && quests[i].Type == RewardType.GOLD3 && quests[i].IsAccept == true)
+                        {
+                            questClear.QuestClearCheck = 1;
+                        }
+                    }
                     if (player.Current_Hp <= (player.MaxHp - 31) && player.Postion >= 1)
                     {
                         player.Current_Hp += 30;
@@ -554,6 +562,16 @@ namespace Team_B_11_RPG
                                 Console.WriteLine("0. 다음");
                                 Console.WriteLine("");
                                 selectedMonster.IsAliveToggle();
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    if (i >= quests.Count) break;
+                                    if (questAcceptCheck == 1 && quests[i].Type == RewardType.GOLD2 && quests[i].IsAccept == true)
+                                    {
+                                        monsterCount++;
+                                        questClear.QuestCount(monsterCount, ref questClearCheck);
+                                        Thread.Sleep(1000);
+                                    }
+                                }
                                 int choice = ConsoleUtility.PromptMenuChoice(0, 0);
 
                                 switch (choice)
