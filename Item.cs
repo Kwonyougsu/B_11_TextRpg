@@ -1,6 +1,6 @@
-﻿
-
-
+﻿using Newtonsoft.Json;
+using System.Numerics;
+using Team_B_11_RPG;
 public enum ItemType
 {
     WEAPON,
@@ -115,5 +115,4 @@ internal class Item
     {
         IsPurchased = true;
     }
-
 }
