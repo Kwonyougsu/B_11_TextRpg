@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Newtonsoft.Json;
+using System.Numerics;
 using Team_B_11_RPG;
 
 internal class Player
@@ -9,7 +10,7 @@ internal class Player
     public int floor = 1;
     Random random = new Random();
 
-    public static List<Item> inventory;
+    public static List<Item> inventory { get; set; }
 
     public string Name { get; set; }
     public string Job { get; }
@@ -35,6 +36,17 @@ internal class Player
         Postion = postion;
     }
 
+    public void Save(string filePath)
+    {
+        string json = JsonConvert.SerializeObject(this);
+        File.WriteAllText(filePath, json);
+    }
+
+    public static Player Load(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        return JsonConvert.DeserializeObject<Player>(json);
+    }
     public void GetExp(int monsterexp)
     {
         PlayerExp += monsterexp;
@@ -214,7 +226,7 @@ internal class Player
                 int j = randnumber.Next(0, 3);
                 Monster.MakeMonster();
                 Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Hp} 방어력 : {Monster.monsters[j].Def}");
+                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
                 Monster randomMonster = Monster.monsters[j];
                 RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
             }
@@ -261,7 +273,7 @@ internal class Player
                 int j = randnumber.Next(6, 9);
                 Monster.MakeMonster();
                 Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Hp} 방어력 : {Monster.monsters[j].Def}");
+                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
                 Monster randomMonster = Monster.monsters[j];
                 RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
             }
@@ -285,7 +297,7 @@ internal class Player
                 int j = randnumber.Next(9, 12);
                 Monster.MakeMonster();
                 Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Hp} 방어력 : {Monster.monsters[j].Def}");
+                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
                 Monster randomMonster = Monster.monsters[j];
                 RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
             }

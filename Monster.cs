@@ -37,7 +37,7 @@ namespace Team_B_11_RPG
             Type = type;
             this.IsAlive = true;
         }
-        public void MonsterBattle(bool withNumber = false, int idx = 0)
+        public void MonsterBattle(bool withNumber = false, int idx = 1)
         {
             if (withNumber)
             {
