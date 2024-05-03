@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Drawing;
+using static QuestClear;
 
 namespace Team_B_11_RPG
 {
@@ -17,10 +18,10 @@ namespace Team_B_11_RPG
 
         private List<Item> storeInventory;
 
-        private List<QuestList> quests;
+        
         private QuestReward questsReward = new QuestReward();
         private QuestClear questClear = new QuestClear();
-        
+        private List<QuestList> quests = new List<QuestList>(QuestListOrder.questOrder);
         public int questAcceptCheck = 0;
         public int questClearCheck = 0;
         public int monsterCount = 0;
@@ -51,12 +52,7 @@ namespace Team_B_11_RPG
                 new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 5, 5, 10, 3000)
             }; // 아이템 리스트 단순화
 
-            quests = new List<QuestList>();
-            quests.Add(new QuestList("아이템을 장착하자1", "아이템 장착하기", RewardType.GOLD2 , false));
-            quests.Add(new QuestList("아이템을 장착하자2", "아이템 장착하기", RewardType.ITEM1, false));
-            quests.Add(new QuestList("아이템을 장착하자3", "아이템 장착하기", RewardType.ITEM2, false));
-            quests.Add(new QuestList("아이템을 장착하자4", "아이템 장착하기", RewardType.ITEM3, false));
-            quests.Add(new QuestList("아이템을 장착하자5", "아이템 장착하기", RewardType.ITEM4, false));
+            
 
 
 
@@ -188,6 +184,14 @@ namespace Team_B_11_RPG
                     MainMenu();
                     break;
                 case 1:// 현재 체력이 최대 체력보다 낮을때 포션 사용 가능 
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (questAcceptCheck == 1 && quests[i].Type == RewardType.GOLD3 && quests[i].IsAccept == true)
+                        {
+                            questClear.QuestClearCheck = 1;
+                            Console.WriteLine("실행완료");
+                        }
+                    }
                     if (player.Current_Hp <= (player.MaxHp - 31) && player.Postion >= 1)
                     {
                         player.Current_Hp += 30;
@@ -207,13 +211,15 @@ namespace Team_B_11_RPG
                     else 
                     {
                         Rest("체력이 이미 가득차있습니다.");
-                    }                    
-                  
+                    }                   
+                    
+                    
+                    
                     break;
             }
         }
 
-        private void StatusMenu()
+        public void StatusMenu()
         {
             Console.Clear();
 
@@ -314,6 +320,14 @@ namespace Team_B_11_RPG
                     break;
                 default:
                     Player.inventory[KeyInput - 1].ToggleEquipStatus();
+                    if(Player.inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
+                    {
+                        questClear.QuestClearCheck = 1;
+                    }
+                    else if (Player.inventory[KeyInput - 1].ToggleEquipStatus == null)
+                    {
+                        questClear.QuestClearCheck = 0;
+                    }
                     EquipMenu();
                     break;
             }
@@ -528,6 +542,17 @@ namespace Team_B_11_RPG
                                 Console.WriteLine("0. 다음");
                                 Console.WriteLine("");
                                 selectedMonster.IsAliveToggle();
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    if (i >= quests.Count)  break; 
+                                    if (questAcceptCheck == 1 && quests[i].Type == RewardType.GOLD2 && quests[i].IsAccept == true)
+                                    {
+                                        monsterCount++;
+                                        questClear.QuestCount(monsterCount, ref questClearCheck);
+                                        Thread.Sleep(1000);
+                                    }
+                                }
+
                                 int choice = ConsoleUtility.PromptMenuChoice(0, 0);
 
                                 switch (choice)
@@ -733,7 +758,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("");
-            int choice = ConsoleUtility.PromptMenuChoice(0, quests.Count);
+            int choice = ConsoleUtility.PromptMenuChoice(0, 3);
             if (choice == 0) MainMenu();
             Console.Clear();
             Console.WriteLine("");
@@ -758,6 +783,19 @@ namespace Team_B_11_RPG
                 Console.WriteLine("1. 보상 받기");
             }
             Console.WriteLine("");
+            for(int i = 0; i<3; i++)
+            {
+                if (i >= quests.Count) break;
+                if (questAcceptCheck ==1 && quests[i].IsAccept == true && quests[i].Type == RewardType.GOLD4)
+                {
+                    if(player.floor > 1)
+                    {
+                        questClear.QuestClearCheck = 1;
+                    }
+                }
+            }
+            questClear.QuestCount(monsterCount, ref questClearCheck);
+            Console.WriteLine(questClearCheck);
             int accept = ConsoleUtility.PromptMenuChoice(0, 1);
             switch(accept) 
             {
@@ -772,32 +810,38 @@ namespace Team_B_11_RPG
                             Console.WriteLine("퀘스트 수락 완료!");
                             quests[choice - 1].IsAccept = true;
                             questAcceptCheck = 1;
+                            Thread.Sleep(1000);
                         }
                         else if (questAcceptCheck == 1)
                         {
                             Console.WriteLine("퀘스트를 이미 받으신 상태입니다!");
+                            Thread.Sleep(1000);
                         }
                         Quest();
                     }
 
                     else if (quests[choice - 1].IsAccept == true )
                     {
+                        questClear.QuestCount(monsterCount, ref questClearCheck);
                         if (questClearCheck == 1)
                         {
                             Console.WriteLine("보상을 받으셨습니다.");
-                            if (quests[choice - 1].Type == RewardType.GOLD1) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 100); }
-                            else if (quests[choice - 1].Type == RewardType.GOLD2) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 200); }
-                            else if (quests[choice - 1].Type == RewardType.GOLD3) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 300); }
-                            else if (quests[choice - 1].Type == RewardType.GOLD4) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 400); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM1) { Player.inventory.Add(new("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            if (quests[choice - 1].Type == RewardType.GOLD1) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 1000); }
+                            else if (quests[choice - 1].Type == RewardType.GOLD2) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 2000); }
+                            else if (quests[choice - 1].Type == RewardType.GOLD3) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 3000); }
+                            else if (quests[choice - 1].Type == RewardType.GOLD4) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 4000); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM1) { Player.inventory.Add(new Item("무", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
                             else if (quests[choice - 1].Type == RewardType.ITEM2) { Player.inventory.Add(new Item("무", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
                             else if (quests[choice - 1].Type == RewardType.ITEM3) { Player.inventory.Add(new Item("쇠", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
                             else if (quests[choice - 1].Type == RewardType.ITEM4) { Player.inventory.Add(new Item("갑", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
                             else if (quests[choice - 1].Type == RewardType.ITEM5) { Player.inventory.Add(new Item("옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
                             Thread.Sleep(1000);
                             quests.RemoveAt(choice - 1);
+                            monsterCount = 0;
+                            monster2Count = 0;
                             questAcceptCheck = 0;
                             questClearCheck = 0;
+                            questClear.QuestClearCheck = 0;
                         }
                         Quest();
                     }
