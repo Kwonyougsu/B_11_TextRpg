@@ -327,14 +327,11 @@ namespace Team_B_11_RPG
                     break;
                 default:
                     Player.inventory[KeyInput - 1].ToggleEquipStatus();
-                    if (Player.inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
+                    if (Player.inventory[KeyInput - 1] != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
                         questClear.QuestClearCheck = 1;
                     }
-                    else if (Player.inventory[KeyInput - 1].ToggleEquipStatus == null)
-                    {
-                        questClear.QuestClearCheck = 0;
-                    }
+                    
                     EquipMenu();
                     break;
             }
@@ -569,7 +566,16 @@ namespace Team_B_11_RPG
                                     {
                                         monsterCount++;
                                         questClear.QuestCount(monsterCount, ref questClearCheck);
-                                        Thread.Sleep(1000);
+                                    }
+                                    else if(questAcceptCheck == 1 && quests[i].Type == RewardType.ITEM4 && quests[i].IsAccept == true && player.floor >= 4)
+                                    {
+                                        monsterCount++;
+                                        questClear.QuestCount(monsterCount, ref questClearCheck);
+                                    }
+                                    else if (questAcceptCheck == 1 && quests[i].Type == RewardType.ITEM5 && quests[i].IsAccept == true && player.floor >= 4 && RandomMonster.randmonsters[SelectMonster - 1].Name == "장로드래곤")
+                                    {
+                                        monsterCount++;
+                                        questClear.QuestCount(monsterCount, ref questClearCheck);
                                     }
                                 }
                                 int choice = ConsoleUtility.PromptMenuChoice(0, 0);
@@ -826,6 +832,26 @@ namespace Team_B_11_RPG
                         questClear.QuestClearCheck = 1;
                     }
                 }
+                else if(questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.ITEM1)
+                {
+                    if(player.Def >= 20)
+                    {
+                        questClear.QuestClearCheck = 1;
+                    }
+                }
+                else if (questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.ITEM2)
+                {
+                    if (player.Atk >= 30)
+                    {
+                        questClear.QuestClearCheck = 1;
+                    }
+                }else if (questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.GOLD3)
+                {
+                    if (player.floor >= 4)
+                    {
+                        questClear.QuestClearCheck = 1;
+                    }
+                }
             }
             questClear.QuestCount(monsterCount, ref questClearCheck);
             int accept = ConsoleUtility.PromptMenuChoice(0, 1);
@@ -861,11 +887,11 @@ namespace Team_B_11_RPG
                             else if (quests[choice - 1].Type == RewardType.GOLD2) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 2000); }
                             else if (quests[choice - 1].Type == RewardType.GOLD3) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 3000); }
                             else if (quests[choice - 1].Type == RewardType.GOLD4) { questClear.QuestClearRewardGold(quests[choice - 1].Type, player, 4000); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM1) { Player.inventory.Add(new("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM2) { Player.inventory.Add(new Item("무", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM3) { Player.inventory.Add(new Item("쇠", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM4) { Player.inventory.Add(new Item("갑", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
-                            else if (quests[choice - 1].Type == RewardType.ITEM5) { Player.inventory.Add(new Item("옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM1) { Player.inventory.Add(new Item("파수꾼의 갑옷", "견고 합니다", ItemType.ARMOR, 0, 20, 0, 5000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM2) { Player.inventory.Add(new Item("톱날 단검", "날이 톱으로 되어있는 단검입니다", ItemType.WEAPON, 15, 0, 0, 5000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM3) { Player.inventory.Add(new Item("암흑의 인장", "적을 처치하고 자신의 영광을 증명하세요", ItemType.ARMOR, 20, 20, 50, 50000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM4) { Player.inventory.Add(new Item("망자의 갑옷", "이갑옷은 당신이 어떤 전장을 해쳐왔는지 증명합니다", ItemType.ARMOR, 0, 80, 100, 500000)); }
+                            else if (quests[choice - 1].Type == RewardType.ITEM5) { Player.inventory.Add(new Item("무한의 대검", "당신을 막을수는없다는걸 말대신 이칼로 증명합니다", ItemType.WEAPON, 80, 0, 0, 500000)); }
                             Thread.Sleep(1000);
                             quests.RemoveAt(choice - 1);
                             monsterCount = 0;
