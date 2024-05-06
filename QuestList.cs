@@ -89,7 +89,7 @@ internal class QuestReward
 internal class QuestClear
 {
 
-    public int Count;
+    public int Count {  get; set; }
     public int QuestClearCheck;
     public void QuestCount(int count, ref int questClearCheck)
     {

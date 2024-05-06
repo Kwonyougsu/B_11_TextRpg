@@ -1171,7 +1171,6 @@ namespace Team_B_11_RPG
             Console.Clear();
             DataMamager<Player>.Save(player, "playerfile.json");
             DataMamager<List<Item>>.Save(inventory, "itemfile.json");
-            DataMamager<List<QuestList>>.Save(quests, "Questfile.json");
             Console.WriteLine("플레이어 정보가 저장되었습니다.");
             Thread.Sleep(2000);
             MainMenu();
