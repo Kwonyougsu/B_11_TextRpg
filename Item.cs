@@ -12,7 +12,7 @@ internal class Item
     public string Name { get; }
     public string Desc { get; }
 
-    private ItemType Type;
+    public ItemType Type;
 
     public int Atk { get; }
     public int Def { get; }
@@ -21,7 +21,7 @@ internal class Item
 
     public int Price { get; }
 
-    public bool IsEquipped { get; private set; }
+    public bool IsEquipped { get; set; }
     public bool IsPurchased { get; private set; }
 
     public Item(string name, string desc, ItemType type, int atk, int def, int hp, int price, bool isEquipped = false, bool isPurchased = false)

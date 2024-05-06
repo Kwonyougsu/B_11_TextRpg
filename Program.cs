@@ -48,7 +48,10 @@ namespace Team_B_11_RPG
                 new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 3, 0, 500),
                 new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
                 new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 5, 0, 2000),
-                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000)
+                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000),
+                new Item("검","검이다",ItemType.WEAPON,20,0,50,5000),
+                new Item("검1","검이다1",ItemType.WEAPON,20,0,50,5000)
+
             }; // 아이템 리스트 단순화
 
 
@@ -252,23 +255,30 @@ namespace Team_B_11_RPG
                     {
                         player.Current_Hp += 30;
                         player.Postion -= 1;
-                        Rest("체력이 30 회복되었습니다.");
+                        Console.WriteLine("체력이 30 회복되었습니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
                     }
                     else if (player.Current_Hp >= (player.MaxHp - 30) && player.Current_Hp <= (player.MaxHp - 1) && player.Postion >= 1)
                     {
                         player.Current_Hp = player.MaxHp;
                         player.Postion -= 1;
-                        Rest("체력이 모두 찼습니다.");
+                        Console.WriteLine("체력이 모두 찼습니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
                     }
                     else if (player.Postion == 0)
                     {
-                        Rest("포션이 부족합니다.");
+                        Console.WriteLine("포션이 부족합니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
                     }
                     else
                     {
-                        Rest("체력이 이미 가득차있습니다.");
+                        Console.WriteLine("체력이 이미 가득차있습니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
                     }
-                    EnemyPhase();
                     break;
             }
         }
@@ -377,6 +387,15 @@ namespace Team_B_11_RPG
                     InventoryMenu();
                     break;
                 default:
+                    if (inventory[KeyInput=1].Type == ItemType.ARMOR)
+                    {
+
+                    }
+                    else if (inventory[KeyInput-1].Type == ItemType.WEAPON)
+                    {
+
+                    }
+                    inventory[KeyInput - 1].ToggleEquipStatus();
                     inventory[KeyInput - 1].ToggleEquipStatus();
                     if (inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
