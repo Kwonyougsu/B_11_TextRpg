@@ -48,7 +48,10 @@ namespace Team_B_11_RPG
                 new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 3, 0, 500),
                 new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
                 new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 5, 0, 2000),
-                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000)
+                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000),
+                new Item("검","검이다",ItemType.WEAPON,20,0,50,5000),
+                new Item("검1","검이다1",ItemType.WEAPON,20,0,50,5000)
+
             }; // 아이템 리스트 단순화
 
 
@@ -232,6 +235,53 @@ namespace Team_B_11_RPG
                     break;
             }
         }
+        private void BattlePostion()
+        {
+            Console.Clear();
+
+            ConsoleUtility.ShowTitle("■ 회복 ■");
+            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다. 남은 포션 : " + player.Postion + "개");
+            Console.WriteLine("");
+            Console.WriteLine("1. 사용하기");
+            Console.WriteLine("0. 나가기");
+
+            switch (ConsoleUtility.PromptMenuChoice(0, 1))
+            {
+                case 0:
+                    BattleAttack();
+                    break;
+                case 1:
+                    if (player.Current_Hp <= (player.MaxHp - 31) && player.Postion >= 1)
+                    {
+                        player.Current_Hp += 30;
+                        player.Postion -= 1;
+                        Console.WriteLine("체력이 30 회복되었습니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
+                    }
+                    else if (player.Current_Hp >= (player.MaxHp - 30) && player.Current_Hp <= (player.MaxHp - 1) && player.Postion >= 1)
+                    {
+                        player.Current_Hp = player.MaxHp;
+                        player.Postion -= 1;
+                        Console.WriteLine("체력이 모두 찼습니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
+                    }
+                    else if (player.Postion == 0)
+                    {
+                        Console.WriteLine("포션이 부족합니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
+                    }
+                    else
+                    {
+                        Console.WriteLine("체력이 이미 가득차있습니다.");
+                        Thread.Sleep(1000);
+                        EnemyPhase();
+                    }
+                    break;
+            }
+        }
 
         private void StatusMenu()
         {
@@ -266,9 +316,10 @@ namespace Team_B_11_RPG
 
             ConsoleUtility.PrintTextHighlights("공격력 : ", player.Atk.ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", player.Def.ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("현재 HP :", player.Current_Hp.ToString() + " / " + player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("현재 체력 :", player.Current_Hp.ToString() + " / " + player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
             ConsoleUtility.PrintTextHighlights("현재 MP :", player.Current_Mp.ToString() + " / " + player.MaxMp.ToString(), bonusMp > 0 ? $" (+{bonusMp})" : "");
-            ConsoleUtility.PrintTextHighlights("경험치 :", player.Exp.ToString());
+
+
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
             Console.WriteLine("");
 
@@ -336,6 +387,14 @@ namespace Team_B_11_RPG
                     InventoryMenu();
                     break;
                 default:
+                    if (inventory[KeyInput = 1].Type == ItemType.ARMOR)
+                    {
+
+                    }
+                    else if (inventory[KeyInput - 1].Type == ItemType.WEAPON)
+                    {
+
+                    }
                     inventory[KeyInput - 1].ToggleEquipStatus();
                     if (inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
@@ -448,8 +507,9 @@ namespace Team_B_11_RPG
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("1. 공격");
             Console.WriteLine("2. 스킬");
+            Console.WriteLine("3. 아이템");
             Console.WriteLine("");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 2);
+            int choice = ConsoleUtility.PromptMenuChoice(0, 3);
 
             switch (choice)
             {
@@ -461,6 +521,9 @@ namespace Team_B_11_RPG
                     break;
                 case 2:
                     ShowSkills();
+                    break;
+                case 3:
+                    BattlePostion();
                     break;
                 default:
                     Console.WriteLine("다시 입력해주세요");
@@ -492,8 +555,10 @@ namespace Team_B_11_RPG
             Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
             Console.WriteLine("");
             Console.WriteLine("0. 도망가기");
+            Console.WriteLine($"{RandomMonster.randmonsters.Count + 1} . 스킬사용");
+            Console.WriteLine($"{RandomMonster.randmonsters.Count + 2} . 아이템 사용");
             Console.WriteLine("");
-            int SelectMonster = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count);
+            int SelectMonster = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count + 2);
             //랜덤 공격력
             Random randatk = new Random();
             double attackPower = player.Atk * (1 - 0.1 * randatk.NextDouble());
@@ -534,7 +599,16 @@ namespace Team_B_11_RPG
                         EnemyPhase();
                     }
                     break;
+
                 default:
+                    if (SelectMonster == RandomMonster.randmonsters.Count + 1)
+                    {
+                        ShowSkills();
+                    }
+                    if (SelectMonster == RandomMonster.randmonsters.Count + 2)
+                    {
+                        BattlePostion();
+                    }
                     if (RandomMonster.randmonsters[SelectMonster - 1].Hp >= 0 && RandomMonster.randmonsters[SelectMonster - 1].IsAlive)
                     {
                         Console.Clear();
@@ -664,6 +738,7 @@ namespace Team_B_11_RPG
             Console.WriteLine($"H :{player.Current_Hp}/{player.MaxHp} ");
             Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
 
+
             Console.WriteLine("");
             Console.WriteLine("1. 알파 스트라이크 - MP 10");
             Console.WriteLine("2. 더블 스트라이크 - MP 15");
@@ -704,7 +779,6 @@ namespace Team_B_11_RPG
                     break;
             }
         }
-
         private void SelectMonsterForSkill(int skillChoice)
         {
             Console.WriteLine("스킬을 사용할 몬스터를 선택하세요: ");
@@ -782,12 +856,12 @@ namespace Team_B_11_RPG
                 Console.WriteLine($"HP : {selectedMonster.Hp} -> HP : {monsterhp}");
                 selectedMonster.Hp = monsterhp;
                 Console.WriteLine(" ");
-                Console.WriteLine("0..다음");
+                Console.WriteLine("0. 다음");
                 int choice = ConsoleUtility.PromptMenuChoice(0, 0);
                 switch (choice)
                 {
                     case 0:
-                        BattleAttack();
+                        EnemyPhase();
                         break;
                     default:
                         Console.WriteLine("다시 입력해주세요.");
@@ -914,19 +988,13 @@ namespace Team_B_11_RPG
             }
             player.PlayerLevelUp();
             player.DungeonResult();
+            player.floor = player.floor + 1;
             Console.WriteLine("");
-            Console.WriteLine($"0. 다음층으로 올라가지 않는다 {player.floor}층 -> {player.floor}층");
-            Console.WriteLine($"1. 다음층으로 올라간다 {player.floor}층 -> {player.floor+1}층");
-            Console.WriteLine("");
-
-            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
+            Console.WriteLine("0. 다음");
+            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
             switch (choice)
             {
                 case 0:
-                    MainMenu();
-                    break;
-                case 1:
-                    player.floor = player.floor + 1;
                     MainMenu();
                     break;
                 default:
@@ -1083,7 +1151,6 @@ namespace Team_B_11_RPG
             Thread.Sleep(2000);
             MainMenu();
         }
-
         public void ReName()
         {
             Console.Clear();
@@ -1093,7 +1160,6 @@ namespace Team_B_11_RPG
             Thread.Sleep(2000);
             MainMenu();
         }
-
     }
 
     public class Program
