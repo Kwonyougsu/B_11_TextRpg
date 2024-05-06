@@ -23,11 +23,11 @@ namespace Team_B_11_RPG
         private List<QuestList> quests = new List<QuestList>(QuestListOrder.questOrder);
         private QuestReward questsReward = new QuestReward();
         private QuestClear questClear = new QuestClear();
-        
+
         public int questAcceptCheck = 0;
         public int questClearCheck = 0;
         public int monsterCount = 0;
-        public int monster2Count= 0;
+        public int monster2Count = 0;
 
         enum PlayerChoice
         {
@@ -42,16 +42,13 @@ namespace Team_B_11_RPG
 
         private void InitializeGame()
         {
-            player = new Player(this,"Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3,50,50);
+            player = new Player(this, "Chad", "전사", 1, 10, 5, 100, 15000, 100, 0, 3, 50, 50);
             storeInventory = new List<Item>
             {
                 new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 3, 0, 500),
                 new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
                 new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 5, 0, 2000),
-                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000),
-                new Item("검","검이다",ItemType.WEAPON,20,0,50,5000),
-                new Item("검1","검이다1",ItemType.WEAPON,20,0,50,5000)
-
+                new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000)
             }; // 아이템 리스트 단순화
 
 
@@ -89,10 +86,10 @@ namespace Team_B_11_RPG
             switch (choice)
             {
                 case 1:
-                    player = new Player(this,player.Name, "탱커", 1, 0, 0, 0, 15000,0,0,3,50,50);
+                    player = new Player(this, player.Name, "탱커", 1, 0, 0, 0, 15000, 0, 0, 3, 50, 50);
                     break;
                 case 2:
-                    player = new Player(this,player.Name, "딜러", 1, 0, 0, 0, 15000,0,0,3,50,50);
+                    player = new Player(this, player.Name, "딜러", 1, 0, 0, 0, 15000, 0, 0, 3, 50, 50);
                     break;
             }
 
@@ -111,7 +108,7 @@ namespace Team_B_11_RPG
             else
             {
                 player.MaxHp = (100 + bonusHp) + (player.Level * 20);
-                player.MaxMp = (50 + bonusMp) + (player.Level *20);
+                player.MaxMp = (50 + bonusMp) + (player.Level * 20);
                 player.Atk = (20 + bonusAtk) + (player.Level * 0.5);
                 player.Def = (2 + bonusDef) + (player.Level * 1);
             }
@@ -187,7 +184,7 @@ namespace Team_B_11_RPG
                 Console.Clear();
                 ConsoleUtility.ShowTitle(prompt);
                 Thread.Sleep(1000);
-            } 
+            }
 
             Console.Clear();
 
@@ -217,7 +214,7 @@ namespace Team_B_11_RPG
                         player.Postion -= 1;
                         Rest("체력이 30 회복되었습니다.");
                     }
-                    else if (player.Current_Hp >= (player.MaxHp -30) && player.Current_Hp <= (player.MaxHp - 1) && player.Postion >= 1)
+                    else if (player.Current_Hp >= (player.MaxHp - 30) && player.Current_Hp <= (player.MaxHp - 1) && player.Postion >= 1)
                     {
                         player.Current_Hp = player.MaxHp;
                         player.Postion -= 1;
@@ -227,58 +224,11 @@ namespace Team_B_11_RPG
                     {
                         Rest("포션이 부족합니다.");
                     }
-                    else 
-                    {
-                        Rest("체력이 이미 가득차있습니다.");
-                    }                    
-                  
-                    break;
-            }
-        }
-        private void BattlePostion()
-        {
-            Console.Clear();
-
-            ConsoleUtility.ShowTitle("■ 회복 ■");
-            Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다. 남은 포션 : " + player.Postion + "개");
-            Console.WriteLine("");
-            Console.WriteLine("1. 사용하기");
-            Console.WriteLine("0. 나가기");
-
-            switch (ConsoleUtility.PromptMenuChoice(0, 1))
-            {
-                case 0:
-                    BattleAttack();
-                    break;
-                case 1:
-                    if (player.Current_Hp <= (player.MaxHp - 31) && player.Postion >= 1)
-                    {
-                        player.Current_Hp += 30;
-                        player.Postion -= 1;
-                        Console.WriteLine("체력이 30 회복되었습니다.");
-                        Thread.Sleep(1000);
-                        EnemyPhase();
-                    }
-                    else if (player.Current_Hp >= (player.MaxHp - 30) && player.Current_Hp <= (player.MaxHp - 1) && player.Postion >= 1)
-                    {
-                        player.Current_Hp = player.MaxHp;
-                        player.Postion -= 1;
-                        Console.WriteLine("체력이 모두 찼습니다.");
-                        Thread.Sleep(1000);
-                        EnemyPhase();
-                    }
-                    else if (player.Postion == 0)
-                    {
-                        Console.WriteLine("포션이 부족합니다.");
-                        Thread.Sleep(1000);
-                        EnemyPhase();
-                    }
                     else
                     {
-                        Console.WriteLine("체력이 이미 가득차있습니다.");
-                        Thread.Sleep(1000);
-                        EnemyPhase();
+                        Rest("체력이 이미 가득차있습니다.");
                     }
+
                     break;
             }
         }
@@ -316,10 +266,9 @@ namespace Team_B_11_RPG
 
             ConsoleUtility.PrintTextHighlights("공격력 : ", player.Atk.ToString(), bonusAtk > 0 ? $" (+{bonusAtk})" : "");
             ConsoleUtility.PrintTextHighlights("방어력 : ", player.Def.ToString(), bonusDef > 0 ? $" (+{bonusDef})" : "");
-            ConsoleUtility.PrintTextHighlights("현재 체력 :", player.Current_Hp.ToString()+" / "+player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
-            ConsoleUtility.PrintTextHighlights("현재 MP :", player.Current_Mp.ToString() + " / " + player.MaxMp.ToString(), bonusMp > 0 ? $" (+{bonusMp})" : "");   
-
-
+            ConsoleUtility.PrintTextHighlights("현재 HP :", player.Current_Hp.ToString() + " / " + player.MaxHp.ToString(), bonusHp > 0 ? $" (+{bonusHp})" : "");
+            ConsoleUtility.PrintTextHighlights("현재 MP :", player.Current_Mp.ToString() + " / " + player.MaxMp.ToString(), bonusMp > 0 ? $" (+{bonusMp})" : "");
+            ConsoleUtility.PrintTextHighlights("경험치 :", player.Exp.ToString());
             ConsoleUtility.PrintTextHighlights("Gold : ", player.Gold.ToString());
             Console.WriteLine("");
 
@@ -387,15 +336,6 @@ namespace Team_B_11_RPG
                     InventoryMenu();
                     break;
                 default:
-                    if (inventory[KeyInput=1].Type == ItemType.ARMOR)
-                    {
-
-                    }
-                    else if (inventory[KeyInput-1].Type == ItemType.WEAPON)
-                    {
-
-                    }
-                    inventory[KeyInput - 1].ToggleEquipStatus();
                     inventory[KeyInput - 1].ToggleEquipStatus();
                     if (inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
@@ -508,9 +448,8 @@ namespace Team_B_11_RPG
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("1. 공격");
             Console.WriteLine("2. 스킬");
-            Console.WriteLine("3. 아이템");
             Console.WriteLine("");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 3);
+            int choice = ConsoleUtility.PromptMenuChoice(0, 2);
 
             switch (choice)
             {
@@ -522,9 +461,6 @@ namespace Team_B_11_RPG
                     break;
                 case 2:
                     ShowSkills();
-                    break;
-                case 3:
-                    BattlePostion();
                     break;
                 default:
                     Console.WriteLine("다시 입력해주세요");
@@ -556,10 +492,8 @@ namespace Team_B_11_RPG
             Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
             Console.WriteLine("");
             Console.WriteLine("0. 도망가기");
-            Console.WriteLine($"{RandomMonster.randmonsters.Count + 1} . 스킬사용");
-            Console.WriteLine($"{RandomMonster.randmonsters.Count + 2} . 아이템 사용");
             Console.WriteLine("");
-            int SelectMonster = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count+2);
+            int SelectMonster = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count);
             //랜덤 공격력
             Random randatk = new Random();
             double attackPower = player.Atk * (1 - 0.1 * randatk.NextDouble());
@@ -600,16 +534,7 @@ namespace Team_B_11_RPG
                         EnemyPhase();
                     }
                     break;
-
                 default:
-                    if (SelectMonster == RandomMonster.randmonsters.Count + 1)
-                    {
-                        ShowSkills();
-                    }
-                    if(SelectMonster == RandomMonster.randmonsters.Count + 2)
-                    {
-                        BattlePostion();
-                    }
                     if (RandomMonster.randmonsters[SelectMonster - 1].Hp >= 0 && RandomMonster.randmonsters[SelectMonster - 1].IsAlive)
                     {
                         Console.Clear();
@@ -656,7 +581,7 @@ namespace Team_B_11_RPG
                                         monsterCount++;
                                         questClear.QuestCount(monsterCount, ref questClearCheck);
                                     }
-                                    else if(questAcceptCheck == 1 && quests[i].Type == RewardType.ITEM4 && quests[i].IsAccept == true && player.floor >= 4)
+                                    else if (questAcceptCheck == 1 && quests[i].Type == RewardType.ITEM4 && quests[i].IsAccept == true && player.floor >= 4)
                                     {
                                         monsterCount++;
                                         questClear.QuestCount(monsterCount, ref questClearCheck);
@@ -739,7 +664,6 @@ namespace Team_B_11_RPG
             Console.WriteLine($"H :{player.Current_Hp}/{player.MaxHp} ");
             Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
 
-
             Console.WriteLine("");
             Console.WriteLine("1. 알파 스트라이크 - MP 10");
             Console.WriteLine("2. 더블 스트라이크 - MP 15");
@@ -780,12 +704,13 @@ namespace Team_B_11_RPG
                     break;
             }
         }
+
         private void SelectMonsterForSkill(int skillChoice)
         {
             Console.WriteLine("스킬을 사용할 몬스터를 선택하세요: ");
             Console.WriteLine(" ");
 
-            for(int i =0; i<RandomMonster.randmonsters.Count; i++)
+            for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {RandomMonster.randmonsters[i].Name} - HP: {RandomMonster.randmonsters[i].Hp}");
             }
@@ -795,7 +720,7 @@ namespace Team_B_11_RPG
 
             int monsterChoice = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count);
 
-            if(monsterChoice == 0)
+            if (monsterChoice == 0)
             {
                 Battle(); // 돌아가기 선택 시 전투 메뉴로 돌아감
             }
@@ -811,7 +736,7 @@ namespace Team_B_11_RPG
             // 선택한 몬스터에 스킬을 적용하고 결과 출력
             double attackPower = 0;
 
-            if(skillChoice == 1)
+            if (skillChoice == 1)
             {
                 attackPower = player.Atk * 2; // 알파 스트라이크의 공격력은 플레이어의 공격력의 두 배
                 Console.WriteLine($"{player.Name}의 알파 스트라이크!");
@@ -827,7 +752,7 @@ namespace Team_B_11_RPG
             int monsterhp = selectedMonster.Hp - (int)attackPower;
 
             // 공격 결과 출력
-            if (monsterhp <=0)
+            if (monsterhp <= 0)
             {
                 // 몬스터 사망 처리
                 Console.WriteLine($"{selectedMonster.Name}을(를) 처치했습니다!");
@@ -857,12 +782,12 @@ namespace Team_B_11_RPG
                 Console.WriteLine($"HP : {selectedMonster.Hp} -> HP : {monsterhp}");
                 selectedMonster.Hp = monsterhp;
                 Console.WriteLine(" ");
-                Console.WriteLine("0. 다음");
+                Console.WriteLine("0..다음");
                 int choice = ConsoleUtility.PromptMenuChoice(0, 0);
                 switch (choice)
                 {
                     case 0:
-                        EnemyPhase();
+                        BattleAttack();
                         break;
                     default:
                         Console.WriteLine("다시 입력해주세요.");
@@ -888,10 +813,10 @@ namespace Team_B_11_RPG
 
             for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
-              //랜덤 공격력
-              Random randatk = new Random();
-              double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
-              MattackPower = Math.Ceiling(MattackPower);
+                //랜덤 공격력
+                Random randatk = new Random();
+                double MattackPower = RandomMonster.randmonsters[i].Atk * (1 - 0.1 * randatk.NextDouble());
+                MattackPower = Math.Ceiling(MattackPower);
 
                 if (RandomMonster.randmonsters[i].IsAlive)
                 {
@@ -899,7 +824,7 @@ namespace Team_B_11_RPG
                     ConsoleUtility.ShowTitle("Battle!!");
                     Console.WriteLine("");
                     Console.WriteLine($"{RandomMonster.randmonsters[i].Name}의 공격!");
-                    Console.WriteLine($"{player.Name}을(를) 공격했습니다. [데미지] : {RandomMonster.randmonsters[i].Atk}"+ $" , {(player.Def * 0.5)} 만큼 방어!");
+                    Console.WriteLine($"{player.Name}을(를) 공격했습니다. [데미지] : {RandomMonster.randmonsters[i].Atk}" + $" , {(player.Def * 0.5)} 만큼 방어!");
                     Console.WriteLine($"[최종 데미지] : {RandomMonster.randmonsters[i].Atk - (player.Def * 0.5)}");
                     if ((int)MattackPower - (player.Def * 0.5) <= 0)
                     {
@@ -919,26 +844,26 @@ namespace Team_B_11_RPG
                         losePhase();
                     }
                     Console.WriteLine("0. 다음");
-                  int choice = ConsoleUtility.PromptMenuChoice(0, 0);
-                  switch (choice)
-                  {
-                      case 0:
-                          break;
-                      default:
-                          Console.WriteLine("다시 입력해주세요");
-                          break;
-                  }
-              }
-              if (RandomMonster.randmonsters[i].IsAlive)
-              {
-                  MonsterAlive = true; // 현재 conunt i에 몬스터가 살아있으면 살림
-              }
+                    int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+                    switch (choice)
+                    {
+                        case 0:
+                            break;
+                        default:
+                            Console.WriteLine("다시 입력해주세요");
+                            break;
+                    }
+                }
+                if (RandomMonster.randmonsters[i].IsAlive)
+                {
+                    MonsterAlive = true; // 현재 conunt i에 몬스터가 살아있으면 살림
+                }
             }
             if (!MonsterAlive) // 몬스터 죽으면 넘어감
             {
                 EndPhase();
             }
-            else 
+            else
             {
                 BattleAttack();
             }
@@ -980,7 +905,7 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             Console.WriteLine($"던전에서 몬스터 {RandomMonster.randmonsters.Count}마리를 잡았습니다");
             Console.WriteLine("");
-            for(int i =0; i < RandomMonster.randmonsters.Count; i++)
+            for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
                 if (player.Exp >= 0)
                 {
@@ -989,13 +914,19 @@ namespace Team_B_11_RPG
             }
             player.PlayerLevelUp();
             player.DungeonResult();
-            player.floor = player.floor + 1;
             Console.WriteLine("");
-            Console.WriteLine("0. 다음");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+            Console.WriteLine($"0. 다음층으로 올라가지 않는다 {player.floor}층 -> {player.floor}층");
+            Console.WriteLine($"1. 다음층으로 올라간다 {player.floor}층 -> {player.floor+1}층");
+            Console.WriteLine("");
+
+            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
             switch (choice)
             {
                 case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    player.floor = player.floor + 1;
                     MainMenu();
                     break;
                 default:
@@ -1017,13 +948,13 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("퀘스트!");
             Console.WriteLine("");
-            for(int i = 0; i <3; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if (i >= quests.Count) 
-                { 
+                if (i >= quests.Count)
+                {
                     break;
                 }
-                Console.WriteLine($"{i+1} . {quests[i].QuestName}");
+                Console.WriteLine($"{i + 1} . {quests[i].QuestName}");
             }
             Console.WriteLine("");
             Console.WriteLine("0. 돌아가기");
@@ -1037,20 +968,20 @@ namespace Team_B_11_RPG
             Console.WriteLine("");
             ConsoleUtility.ShowTitle("퀘스트목록");
             Console.WriteLine("");
-            Console.WriteLine($"{quests[choice-1].QuestName}");
+            Console.WriteLine($"{quests[choice - 1].QuestName}");
             Console.WriteLine("");
-            Console.WriteLine($"{quests[choice-1].QuestDetail}");
+            Console.WriteLine($"{quests[choice - 1].QuestDetail}");
             Console.WriteLine("");
             questClear.QuestClearRequest(quests[choice - 1].Type);
             Console.WriteLine("");
             questsReward.QuestRewardType(quests[choice - 1].Type);
             Console.WriteLine("");
-            if (quests[choice - 1].IsAccept == false) 
+            if (quests[choice - 1].IsAccept == false)
             {
                 Console.WriteLine("0. 돌아가기");
                 Console.WriteLine("1. 수락");
             }
-            else if (quests[choice -1].IsAccept == true)
+            else if (quests[choice - 1].IsAccept == true)
             {
                 Console.WriteLine("0. 돌아가기");
                 Console.WriteLine("1. 보상 받기");
@@ -1066,9 +997,9 @@ namespace Team_B_11_RPG
                         questClear.QuestClearCheck = 1;
                     }
                 }
-                else if(questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.ITEM1)
+                else if (questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.ITEM1)
                 {
-                    if(player.Def >= 20)
+                    if (player.Def >= 20)
                     {
                         questClear.QuestClearCheck = 1;
                     }
@@ -1079,7 +1010,8 @@ namespace Team_B_11_RPG
                     {
                         questClear.QuestClearCheck = 1;
                     }
-                }else if (questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.GOLD3)
+                }
+                else if (questAcceptCheck == 1 && quests[i].IsAccept == true && quests[i].Type == RewardType.GOLD3)
                 {
                     if (player.floor >= 4)
                     {
@@ -1089,13 +1021,13 @@ namespace Team_B_11_RPG
             }
             questClear.QuestCount(monsterCount, ref questClearCheck);
             int accept = ConsoleUtility.PromptMenuChoice(0, 1);
-            switch(accept) 
+            switch (accept)
             {
                 case 0:
                     Quest();
                     break;
                 case 1:
-                    if (quests[choice - 1].IsAccept == false )
+                    if (quests[choice - 1].IsAccept == false)
                     {
                         if (questAcceptCheck == 0)
                         {
@@ -1112,7 +1044,7 @@ namespace Team_B_11_RPG
                         Quest();
                     }
 
-                    else if (quests[choice - 1].IsAccept == true )
+                    else if (quests[choice - 1].IsAccept == true)
                     {
                         if (questClearCheck == 1)
                         {
@@ -1145,31 +1077,33 @@ namespace Team_B_11_RPG
         public void SavePlayerData()
         {
             Console.Clear();
-            DataMamager<Player>.Save(player,"playerfile.json");
-            DataMamager<List<Item>>.Save(inventory,"itemfile.json");
+            DataMamager<Player>.Save(player, "playerfile.json");
+            DataMamager<List<Item>>.Save(inventory, "itemfile.json");
             Console.WriteLine("플레이어 정보가 저장되었습니다.");
             Thread.Sleep(2000);
             MainMenu();
         }
+
         public void ReName()
         {
             Console.Clear();
-            Console.Write("이름을 설정해주세요. : "); 
+            Console.Write("이름을 설정해주세요. : ");
             player.Name = Console.ReadLine();
             Console.WriteLine($"플레이어 이름이{player.Name}으로 변경되었습니다.");
             Thread.Sleep(2000);
             MainMenu();
         }
+
     }
 
-        public class Program
+    public class Program
+    {
+        public static void Main(string[] args)
         {
-            public static void Main(string[] args)
-            {
-                GameManager gameManager = new GameManager();
-                gameManager.StartGame();
-                //gameManager.SavePlayerData();
-        }
+            GameManager gameManager = new GameManager();
+            gameManager.StartGame();
+            //gameManager.SavePlayerData();
         }
     }
+}
 

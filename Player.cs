@@ -27,7 +27,7 @@ namespace Team_B_11_RPG
         public int Postion { get; set; }
         public int MaxMp { get; set; }
         public int Current_Mp { get; set; }
-        public Player(GameManager manager,string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp, int postion,int maxmp,int current_mp)
+        public Player(GameManager manager, string name, string job, int level, double atk, int def, int maxhp, int gold, int current_hp, int exp, int postion, int maxmp, int current_mp)
         {
             Manager = manager;
             Name = name;
@@ -44,10 +44,10 @@ namespace Team_B_11_RPG
             Current_Mp = current_mp;
         }
 
-    public void GetExp(int monsterexp)
-    {
-        PlayerExp += monsterexp;
-    }
+        public void GetExp(int monsterexp)
+        {
+            PlayerExp += monsterexp;
+        }
         public void PlayerLevelUp()
         {
             int LevelUpExp = requireExp[Level];
@@ -72,15 +72,15 @@ namespace Team_B_11_RPG
             }
             else
             {
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{Level} {Name} ({Job})");
-            Console.WriteLine($"HP :{MaxHp} -> {Current_Hp}");
-            Console.WriteLine($"MP :{MaxMp} -> {Current_Mp}");
-            Console.WriteLine($"Exp :{Exp} -> {MaxExp}");
-            Exp = Exp + PlayerExp;
+                Console.WriteLine("[내 정 보]");
+                Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+                Console.WriteLine($"HP :{MaxHp} -> {Current_Hp}");
+                Console.WriteLine($"MP :{MaxMp} -> {Current_Mp}");
+                Console.WriteLine($"Exp :{Exp} -> {MaxExp}");
+                Exp = Exp + PlayerExp;
+            }
+            PlayerExp = 0;
         }
-        PlayerExp = 0;
-    }
 
 
 
@@ -98,7 +98,7 @@ namespace Team_B_11_RPG
                 int itemdrop = random.Next(0, 10); //50%확률로 아이템 드랍
 
                 List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(0, 3);
-                
+
                 Console.WriteLine("");
                 Console.WriteLine("[획득 아이템]");
                 ConsoleUtility.ShowTitle($"{gold} G");
@@ -116,9 +116,6 @@ namespace Team_B_11_RPG
                     {
                         int randomIndex = random.Next(0, monsterDropList.Count);
                         Item droppedItem = monsterDropList[randomIndex];
-                        Console.WriteLine(monsterDropList.Count);
-                        Console.WriteLine(randomIndex);
-                        Console.WriteLine(droppedItem.Name);
                         Manager.inventory.Add(droppedItem);
                         Console.Write($"{droppedItem.Name} - ");
                         ConsoleUtility.ShowTitle("1");
@@ -196,128 +193,129 @@ namespace Team_B_11_RPG
 
                 List<Item> monsterDropList = RandomMonster.monsterdrop.GetRange(12, 15);
 
-            Console.WriteLine("");
-            Console.WriteLine("[획득 아이템]");
-            ConsoleUtility.ShowTitle($"{gold} G");
-            Gold = Gold + gold;
-            if (postion != 0)
-            {
-                Console.Write("포션 - ");
-                ConsoleUtility.ShowTitle($"{postion}");
-                Postion = Postion + postion;
-            }
-            if (itemdrop < 5)
-            {
-                if (monsterDropList.Count > 0)
+                Console.WriteLine("");
+                Console.WriteLine("[획득 아이템]");
+                ConsoleUtility.ShowTitle($"{gold} G");
+                Gold = Gold + gold;
+                if (postion != 0)
                 {
-                    int randomIndex = random.Next(0, monsterDropList.Count);
-                    Item droppedItem = monsterDropList[randomIndex];
-                    Manager.inventory.Add(droppedItem);
-                    Console.Write($"{droppedItem.Name} - ");
-                    ConsoleUtility.ShowTitle("1");
+                    Console.Write("포션 - ");
+                    ConsoleUtility.ShowTitle($"{postion}");
+                    Postion = Postion + postion;
                 }
-            }
-        }// 4층 
-    }
-    public void DungeonFloor()
-    {
-        if(floor == 1) 
+                if (itemdrop < 5)
+                {
+                    if (monsterDropList.Count > 0)
+                    {
+                        int randomIndex = random.Next(0, monsterDropList.Count);
+                        Item droppedItem = monsterDropList[randomIndex];
+                        Manager.inventory.Add(droppedItem);
+                        Console.Write($"{droppedItem.Name} - ");
+                        ConsoleUtility.ShowTitle("1");
+                    }
+                }
+            }// 4층 
+        }
+        public void DungeonFloor()
         {
-            Console.Clear();
-            ConsoleUtility.ShowTitle("Battle ! ");
-            // 저장되어있는 랜덤몬스터 클리어 
-            RandomMonster.randmonsters.Clear();
-            // 랜덤 몬스터 생성
-            Random randnumber = new Random();
-            // 몬스터 출력
-            for (int i = 0; i < randnumber.Next(1, 5); i++)
+            if (floor == 1)
             {
-                int j = randnumber.Next(0, 3);
-                Monster.MakeMonster();
-                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
-                Monster randomMonster = Monster.monsters[j];
-                RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
-            }
-            Console.WriteLine("");
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{Level} {Name} ({Job})");
-            Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
-            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
+                Console.Clear();
+                ConsoleUtility.ShowTitle("Battle ! ");
+                // 저장되어있는 랜덤몬스터 클리어 
+                RandomMonster.randmonsters.Clear();
+                // 랜덤 몬스터 생성
+                Random randnumber = new Random();
+                // 몬스터 출력
+                for (int i = 0; i < randnumber.Next(1, 5); i++)
+                {
+                    int j = randnumber.Next(0, 3);
+                    Monster.MakeMonster();
+                    Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
+                    $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
+                    Monster randomMonster = Monster.monsters[j];
+                    RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
+                }
+                Console.WriteLine("");
+                Console.WriteLine("[내 정 보]");
+                Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+                Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+                Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
+
             }// 1층
-        if (floor == 2) 
-        {
-            Console.Clear();
-            ConsoleUtility.ShowTitle("Battle ! ");
-            // 저장되어있는 랜덤몬스터 클리어 
-            RandomMonster.randmonsters.Clear();
-            // 랜덤 몬스터 생성
-            Random randnumber = new Random();
-            // 몬스터 출력
-            for (int i = 0; i < randnumber.Next(1, 6); i++)
+            if (floor == 2)
             {
-                int j = randnumber.Next(3, 6);
-                Monster.MakeMonster();
-                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
-                Monster randomMonster = Monster.monsters[j];
-                RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
-            }
-            Console.WriteLine("");
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{Level} {Name} ({Job})");
-            Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
-            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
+                Console.Clear();
+                ConsoleUtility.ShowTitle("Battle ! ");
+                // 저장되어있는 랜덤몬스터 클리어 
+                RandomMonster.randmonsters.Clear();
+                // 랜덤 몬스터 생성
+                Random randnumber = new Random();
+                // 몬스터 출력
+                for (int i = 0; i < randnumber.Next(1, 6); i++)
+                {
+                    int j = randnumber.Next(3, 6);
+                    Monster.MakeMonster();
+                    Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
+                    $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
+                    Monster randomMonster = Monster.monsters[j];
+                    RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
+                }
+                Console.WriteLine("");
+                Console.WriteLine("[내 정 보]");
+                Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+                Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+                Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
             }// 2층
-        if (floor == 3) 
-        {
-            Console.Clear();
-            ConsoleUtility.ShowTitle("Battle ! ");
-            // 저장되어있는 랜덤몬스터 클리어 
-            RandomMonster.randmonsters.Clear();
-            // 랜덤 몬스터 생성
-            Random randnumber = new Random();
-            // 몬스터 출력
-            for (int i = 0; i < randnumber.Next(1, 7); i++)
+            if (floor == 3)
             {
-                int j = randnumber.Next(6, 9);
-                Monster.MakeMonster();
-                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
-                Monster randomMonster = Monster.monsters[j];
-                RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
-            }
-            Console.WriteLine("");
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{Level} {Name} ({Job})");
-            Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
-            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
+                Console.Clear();
+                ConsoleUtility.ShowTitle("Battle ! ");
+                // 저장되어있는 랜덤몬스터 클리어 
+                RandomMonster.randmonsters.Clear();
+                // 랜덤 몬스터 생성
+                Random randnumber = new Random();
+                // 몬스터 출력
+                for (int i = 0; i < randnumber.Next(1, 7); i++)
+                {
+                    int j = randnumber.Next(6, 9);
+                    Monster.MakeMonster();
+                    Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
+                    $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
+                    Monster randomMonster = Monster.monsters[j];
+                    RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
+                }
+                Console.WriteLine("");
+                Console.WriteLine("[내 정 보]");
+                Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+                Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+                Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
             }// 3층
-        if (floor == 4) 
-        {
-            Console.Clear();
-            ConsoleUtility.ShowTitle("Battle ! ");
-            // 저장되어있는 랜덤몬스터 클리어 
-            RandomMonster.randmonsters.Clear();
-            // 랜덤 몬스터 생성
-            Random randnumber = new Random();
-            // 몬스터 출력
-            for (int i = 0; i < randnumber.Next(1, 2); i++)
+            if (floor == 4)
             {
-                int j = randnumber.Next(9, 12);
-                Monster.MakeMonster();
-                Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
-                $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
-                Monster randomMonster = Monster.monsters[j];
-                RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
-            }
-            Console.WriteLine("");
-            Console.WriteLine("[내 정 보]");
-            Console.WriteLine($"Lv.{Level} {Name} ({Job})");
-            Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
-            Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
+                Console.Clear();
+                ConsoleUtility.ShowTitle("Battle ! ");
+                // 저장되어있는 랜덤몬스터 클리어 
+                RandomMonster.randmonsters.Clear();
+                // 랜덤 몬스터 생성
+                Random randnumber = new Random();
+                // 몬스터 출력
+                for (int i = 0; i < randnumber.Next(1, 2); i++)
+                {
+                    int j = randnumber.Next(9, 12);
+                    Monster.MakeMonster();
+                    Console.WriteLine($"Lv.{Monster.monsters[j].Level} {Monster.monsters[j].Name} HP {Monster.monsters[j].Hp} " +
+                    $" || 공격력 : {Monster.monsters[j].Atk} 방어력 : {Monster.monsters[j].Def}");
+                    Monster randomMonster = Monster.monsters[j];
+                    RandomMonster.randmonsters.Add(new RandomMonster(randomMonster.Name, randomMonster.Level, randomMonster.Atk, randomMonster.Def, randomMonster.Hp, randomMonster.Type, randomMonster.IsAlive));
+                }
+                Console.WriteLine("");
+                Console.WriteLine("[내 정 보]");
+                Console.WriteLine($"Lv.{Level} {Name} ({Job})");
+                Console.WriteLine($"HP :{Current_Hp}/{MaxHp}");
+                Console.WriteLine($"MP :{Current_Mp}/{MaxMp}");
 
             }// 4층 (보스)
 
