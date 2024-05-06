@@ -386,15 +386,7 @@ namespace Team_B_11_RPG
                 case 0:
                     InventoryMenu();
                     break;
-                default:
-                    if (inventory[KeyInput = 1].Type == ItemType.ARMOR)
-                    {
-
-                    }
-                    else if (inventory[KeyInput - 1].Type == ItemType.WEAPON)
-                    {
-
-                    }
+                default:                   
                     inventory[KeyInput - 1].ToggleEquipStatus();
                     if (inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
@@ -988,13 +980,21 @@ namespace Team_B_11_RPG
             }
             player.PlayerLevelUp();
             player.DungeonResult();
-            player.floor = player.floor + 1;
+            player.PlayerLevelUp();
+            player.DungeonResult();
             Console.WriteLine("");
-            Console.WriteLine("0. 다음");
-            int choice = ConsoleUtility.PromptMenuChoice(0, 0);
+            Console.WriteLine($"0. 다음층으로 올라가지 않는다 {player.floor}층 -> {player.floor}층");
+            Console.WriteLine($"1. 다음층으로 올라간다 {player.floor}층 -> {player.floor + 1}층");
+            Console.WriteLine("");
+
+            int choice = ConsoleUtility.PromptMenuChoice(0, 1);
             switch (choice)
             {
                 case 0:
+                    MainMenu();
+                    break;
+                case 1:
+                    player.floor = player.floor + 1;
                     MainMenu();
                     break;
                 default:
