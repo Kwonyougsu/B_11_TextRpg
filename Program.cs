@@ -49,8 +49,7 @@ namespace Team_B_11_RPG
                 new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000),
                 new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 5, 0, 2000),
                 new Item("튼튼한 가시갑옷", "튼튼하고 날카로운 갑옷", ItemType.ARMOR, 3, 3, 10, 3000),
-                new Item("검","검이다",ItemType.WEAPON,20,0,50,5000),
-                new Item("검1","검이다1",ItemType.WEAPON,20,0,50,5000)
+                new Item("대검","큰검이다",ItemType.WEAPON,20,0,50,5000)
 
             }; // 아이템 리스트 단순화
 
@@ -386,8 +385,33 @@ namespace Team_B_11_RPG
                 case 0:
                     InventoryMenu();
                     break;
-                default:                   
-                    inventory[KeyInput - 1].ToggleEquipStatus();
+                default:
+
+                    if (inventory[KeyInput - 1].Type == ItemType.WEAPON)
+                    {
+                        for (int j = 0; j < inventory.Count; j++)
+                        {
+                            if (inventory[j].Type == ItemType.WEAPON)
+                            {
+                                inventory[j].IsEquipped = false;
+                            }
+                        }
+                        inventory[KeyInput - 1].ToggleEquipStatus();
+
+                    }
+                    else if (inventory[KeyInput - 1].Type == ItemType.ARMOR)
+                    {
+                        for (int j = 0; j < inventory.Count; j++)
+                        {
+                            if (inventory[j].Type == ItemType.ARMOR)
+                            {
+                                inventory[j].IsEquipped = false;
+                            }
+                        }
+                        inventory[KeyInput - 1].ToggleEquipStatus();
+
+                    }
+
                     if (inventory[KeyInput - 1].ToggleEquipStatus != null && quests[0].IsAccept == true && quests[0].Type == RewardType.GOLD1)
                     {
                         questClear.QuestClearCheck = 1;
@@ -1147,6 +1171,7 @@ namespace Team_B_11_RPG
             Console.Clear();
             DataMamager<Player>.Save(player, "playerfile.json");
             DataMamager<List<Item>>.Save(inventory, "itemfile.json");
+            DataMamager<List<QuestList>>.Save(quests, "Questfile.json");
             Console.WriteLine("플레이어 정보가 저장되었습니다.");
             Thread.Sleep(2000);
             MainMenu();
