@@ -571,8 +571,8 @@ namespace Team_B_11_RPG
             Console.WriteLine($"MP :{player.Current_Mp}/{player.MaxMp}");
             Console.WriteLine("");
             Console.WriteLine("0. 도망가기");
-            Console.WriteLine($"{RandomMonster.randmonsters.Count + 1} . 스킬사용");
-            Console.WriteLine($"{RandomMonster.randmonsters.Count + 2} . 아이템 사용");
+            Console.WriteLine($"{RandomMonster.randmonsters.Count + 1} .스킬사용");
+            Console.WriteLine($"{RandomMonster.randmonsters.Count + 2} .아이템 사용");
             Console.WriteLine("");
             int SelectMonster = ConsoleUtility.PromptMenuChoice(0, RandomMonster.randmonsters.Count + 2);
             //랜덤 공격력
@@ -802,7 +802,7 @@ namespace Team_B_11_RPG
 
             for (int i = 0; i < RandomMonster.randmonsters.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {RandomMonster.randmonsters[i].Name} - HP: {RandomMonster.randmonsters[i].Hp}");
+                RandomMonster.randmonsters[i].MonsterBattle(true, i + 1);
             }
 
             Console.WriteLine("0. 돌아가기");
@@ -816,6 +816,13 @@ namespace Team_B_11_RPG
             }
             else
             {
+                if (RandomMonster.randmonsters[monsterChoice-1].IsAlive == false)
+                {
+                    Console.WriteLine("이미 죽은 몬스터를 공격할 수 없습니다.다시 입력해주세요");
+                    Thread.Sleep(2000);
+                    ShowSkills();
+                }
+                else
                 // 선택한 몬스터에 스킬 적용
                 ApplySkillToMonster(monsterChoice, skillChoice);
             }
