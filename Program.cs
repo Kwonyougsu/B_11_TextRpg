@@ -854,6 +854,25 @@ namespace Team_B_11_RPG
                 // 몬스터 사망 처리
                 Console.WriteLine($"{selectedMonster.Name}을(를) 처치했습니다!");
                 Console.WriteLine($"HP : {selectedMonster.Hp} -> Dead");
+                for (int i = 0; i < 3; i++)
+                {
+                    if (i >= quests.Count) break;
+                    if (questAcceptCheck == 1 && quests[i].Type == RewardType.GOLD2 && quests[i].IsAccept == true)
+                    {
+                        monsterCount++;
+                        questClear.QuestCount(monsterCount, ref questClearCheck);
+                    }
+                    else if (questAcceptCheck == 1 && quests[i].Type == RewardType.ITEM4 && quests[i].IsAccept == true && player.floor >= 4)
+                    {
+                        monsterCount++;
+                        questClear.QuestCount(monsterCount, ref questClearCheck);
+                    }
+                    else if (questAcceptCheck == 1 && quests[i].Type == RewardType.ITEM5 && quests[i].IsAccept == true && player.floor >= 4 && selectedMonster.Name == "장로드래곤")
+                    {
+                        monsterCount++;
+                        questClear.QuestCount(monsterCount, ref questClearCheck);
+                    }
+                }
                 selectedMonster.Hp = 0;
                 selectedMonster.IsAliveToggle();
 
